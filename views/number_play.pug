@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}.
+  hr
+  p Use this website to train your memory.
+  
+  div(class="table-responsive")
+    table(class="table table-striped table-hover")
+      thead
+        tr
+          th(scope='col') # Row
+          th(scope='col') Numbers
+      tbody
+        each n, index in number_list
+          tr
+            th(scope='row') #{index}
+            td
+              each number in n
+                | #{number}    

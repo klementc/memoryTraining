@@ -11,6 +11,12 @@ block content
       label(for='group_by') Line size:
       input#group_by.form-control(type='number',
       placeholder='6', name='group_by', value=(undefined===group_by ? '6' : group_by.name))
+
+      label(for='duration') Duration (minutes):
+      input#duration.form-control(type='number', placeholder='3', name='duration', value=(undefined===duration ? '3' : duration.name))
+
+      label(for='seed') Seed (optional):
+      input#seed.form-control(type='number', step="any", placeholder='', name='seed', value=(undefined===seed ? '' : seed.name))
     button.btn.btn-primary(type='submit') Submit
 
   if errors 

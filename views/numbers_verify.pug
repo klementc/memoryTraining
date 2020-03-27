@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  h1= title
+  hr
+
+  if err
+    h2 #{err}
+  else if recall
+    strong You entered: #{recall}
+    hr
+    strong Correction:
+    br
+
+    each valc, index in correct
+      strong #{valc} : 
+      | #{recall[index]}
+      br
+  else
+    strong For seed: #{seed}
+    br
+    strong Total numbers: #{size}
+      hr
+
+    form(method='POST' action='')
+      div.form-group
+        label(for='recall') Recall:
+        input#recall.form-control(type='number' placeholder='recall' name='recall')
+
+        input#seed.form-control(type='hidden', name='seed' value=seed)
+        input#size.form-control(type='hidden', name='size' value=size)
+      button.btn.btn-primary(type='submit') Submit

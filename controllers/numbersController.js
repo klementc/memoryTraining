@@ -65,9 +65,8 @@ exports.number_verify = function(req, res) {
         err="Play a game before verifying";
     else {
         res.render('numbers_verify',{
-            title:'Validate your recall:',
-            nbLines:req.body.row,
-            lenLine: req.body.size/req.body.row,
+            title:'Validate your recall',
+            row:req.body.row,
             seed:req.body.seed,
             size: req.body.size,
             recall: req.body.recall,

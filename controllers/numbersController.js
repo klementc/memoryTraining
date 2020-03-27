@@ -44,14 +44,16 @@ exports.number_create_post = [
                 seed = req.body.seed;
             else
                 seed = randU32Sync();
-
+            
+            console.log("aa"+req.body.base);
             res.render('number_play', {
                 title: 'Play Numbers', 
-                number_list: get_number_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by),
+                number_list: get_number_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by, req.body.base=="binary"),
                 timer: req.body.duration*60,
                 seed:seed,
                 size:req.body.amount*req.body.group_by,
-                row:req.body.group_by
+                row:req.body.group_by,
+                base: req.body.base
             });
         }
     }
@@ -64,25 +66,27 @@ exports.number_verify = function(req, res) {
     if(! req.body.seed || ! req.body.size)
         err="Play a game before verifying";
     else {
+        
         res.render('numbers_verify',{
             title:'Validate your recall',
             row:req.body.row,
+            base: req.body.base,
             seed:req.body.seed,
             size: req.body.size,
             recall: req.body.recall,
-            correct: get_number_list_from_seed(MersenneTwister19937.seed(req.body.seed), req.body.size, 1),
+            correct: get_number_list_from_seed(MersenneTwister19937.seed(req.body.seed), req.body.size, 1, req.body.base=="binary"),
             err:err});
     }
 }
 
 /** create random numbers to memorize from a seed */
-function get_number_list_from_seed(seed, nLine, lSize) {
+function get_number_list_from_seed(seed, nLine, lSize, binary) {
     const random = new Random(seed);
     var nList = []
     for(var i=0; i<nLine; i++){
         nList.push([]);
         for(var j=0;j<lSize;j++) {
-            nList[i].push(random.integer(0,9));
+            nList[i].push(binary ? random.integer(0,1) : random.integer(0,9));
         }
     }
     return nList;

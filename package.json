@@ -7,7 +7,9 @@
     "devstart": "DEBUG=memorytrainer:* nodemon ./bin/www"
   },
   "dependencies": {
+    "acorn": "^7.1.1",
     "async": "^3.2.0",
+    "clean-css": "^4.2.3",
     "compression": "^1.7.4",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -17,7 +19,7 @@
     "http-errors": "~1.6.3",
     "mongoose": "^5.9.6",
     "morgan": "~1.9.1",
-    "pug": "2.0.0-beta11",
+    "pug": "^2.0.4",
     "random-js": "^2.1.0"
   },
   "devDependencies": {

@@ -2,6 +2,7 @@ extends layout
 
 block content
   h1 #{title}
+  hr
 
   form(method='POST' action='')
     div.form-group
@@ -17,6 +18,13 @@ block content
 
       label(for='seed') Seed (optional):
       input#seed.form-control(type='number', step="any", placeholder='', name='seed', value=(undefined===seed ? '' : seed.name))
+      br
+      br
+      label(for="base") Base:
+      select(class="base" name="base")
+        option(value="decimal") decimal
+        option(value="binary") binary
+
     button.btn.btn-primary(type='submit') Submit
 
   if errors 

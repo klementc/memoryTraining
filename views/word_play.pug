@@ -14,11 +14,11 @@ block data
       thead
         tr
           th(scope='col') # Row
-          th(scope='col') Numbers
+          th(scope='col') Words
       tbody
-        each n, index in number_list
+        each n, index in word_list
           tr
             th(scope='row') #{index}
             td
-              each number in n
-                | #{number} 
+              each word in n
+                | #{word} 

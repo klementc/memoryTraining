@@ -45,15 +45,15 @@ exports.number_create_post = [
             else
                 seed = randU32Sync();
             
-            console.log("aa"+req.body.base);
             res.render('number_play', {
-                title: 'Play Numbers', 
+                title: 'Play Words', 
                 number_list: get_number_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by, req.body.base=="binary"),
                 timer: req.body.duration*60,
                 seed:seed,
                 size:req.body.amount*req.body.group_by,
                 row:req.body.group_by,
-                base: req.body.base
+                base: req.body.base,
+                verifUrl: "/game/numbers/verify"
             });
         }
     }

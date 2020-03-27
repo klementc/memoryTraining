@@ -10,12 +10,13 @@ block content
     h2(id='score') Your score: #{score}
     - var score = 0
     hr
+    - var t = recall.split(" ");
     strong Correction:
     br
     div(class="corrzone")
       - var i = 0
       each valc, index in correct
-        - var c = recall[index]
+        - var c = t[index]
         if c == undefined
           - c = '_'
         if valc == c
@@ -36,7 +37,7 @@ block content
     br
     strong Total numbers: #{size}
       hr
-    p Enter the numbers in the following text input, without any separation between digits (put a random character for the ones you don't remember).
+    p Enter the words in the following text input, separating words with a space.
 
     form(method='POST' action='')
       div.form-group

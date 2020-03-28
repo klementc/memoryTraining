@@ -8,9 +8,14 @@ var indexRouter = require('./routes/index');
 var gameRouter = require('./routes/game');
 var numbersRouter = require('./routes/numbers')
 var wordsRouter = require('./routes/words');
+var piRouter = require('./routes/pi');
+
+var compression = require('compression');
+var helmet = require('helmet');
 
 var app = express();
 
+app.use(helmet());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -19,12 +24,16 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(compression()); //Compress all routes
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/game/', gameRouter);
 app.use('/game/numbers/', numbersRouter);
 app.use('/game/words/', wordsRouter);
+app.use('/game/pi/', piRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

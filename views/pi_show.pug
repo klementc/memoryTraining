@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1= title
+  hr
+  p Digits starting from the #{from}'th decimal.
+  hr
+  h3 PI=3.
+
+  div(id="memZone" class="table-responsive")
+    table(class="table table-striped table-hover")
+      thead
+        tr
+          th(scope='col') # Decimal
+          th(scope='col') values
+      tbody
+        - var l = 0
+        while l < nbLines
+          tr
+          - var index = Number(from)+(l*group_by)
+          th(scope='row') #{index}
+          td
+            - var c = 0
+            while c < group_by
+              | #{numList[Number(c)+(l*group_by)]}
+              - c++
+          - l++

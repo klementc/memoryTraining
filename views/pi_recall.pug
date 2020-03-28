@@ -1,0 +1,48 @@
+extends layout
+
+block content
+  h1= title
+  hr
+
+  if err
+    h2 #{err}
+  else if recall
+    h2(id='score') Your score: #{score}
+    - var score = 0
+    hr
+    strong Correction:
+    br
+    div(class="corrzone")
+      - var i = 0
+      each valc, index in numList
+        - var c = recall[index]
+        if c == undefined
+          - c = '_'
+        if valc == c
+          - score++
+          strong #{valc} : 
+          em(class="bg-success") #{c}
+        else
+          strong #{valc} : 
+          em(class="bg-danger") #{c}
+        | &nbsp; 
+        - i++
+        if i % row == 0
+          br
+    script.
+      document.getElementById("score").innerHTML="Your score: #{score}/#{size}";
+  else
+    strong Total numbers: #{size}
+      hr
+    p Enter the numbers in the following text input, without any separation between digits (put a random character for the ones you don't remember).
+
+    form(method='POST' action='')
+      div.form-group
+        label(for='recall') Recall:
+        input#recall.form-control(type='input' placeholder='recall' name='recall')
+
+        input#task.form-control(type='hidden' name='task' value="corr")
+        input#size.form-control(type='hidden' name='size' value=size)
+        input#numList.form-control(type='hidden' name='numList' value=numList)
+
+      button.btn.btn-primary(type='submit') Submit

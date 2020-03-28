@@ -70,8 +70,7 @@ exports.word_verify = function(req, res) {
   
   if(! req.body.seed || ! req.body.size)
       err="Play a game before verifying";
-  else {
-      
+  else {      
       res.render('words_verify',{
           title:'Validate your recall',
           row:req.body.row,

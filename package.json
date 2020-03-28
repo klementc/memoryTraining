@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "devstart": "DEBUG=memorytrainer:* nodemon ./bin/www"
+    "devstart": "DEBUG=memorytrainer:* nodemon ./bin/www",
+    "deploy":"NODE_ENV='production' npm run start"
   },
   "dependencies": {
     "acorn": "^7.1.1",

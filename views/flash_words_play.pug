@@ -7,7 +7,6 @@ block content
   p(class="text-center")
     em(id="word") Ready
   hr
-  p #{word_list} #{duration}
   script.
     var words = "#{word_list}".split(",");
 
@@ -28,4 +27,4 @@ block content
       '</form>');
       $('body').append(form);
       form.submit();
-    }, (words.length+1)*1000);
+    }, (words.length+1)*#{duration}*1000);

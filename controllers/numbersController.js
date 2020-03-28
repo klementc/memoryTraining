@@ -15,13 +15,13 @@ exports.number_create_get = function(req, res) {
 exports.number_create_post = [
     // parse parameters
     validator.body('amount', 'Amount of number required').trim().isLength({min: 1}),
-    validator.body('amount', 'Amount must be a number').isNumeric(),
+    validator.body('amount', 'Amount must be a number between 1 and 1000').isInt({min:1, max:1000}),
     validator.sanitizeBody('amount').escape(),
 
-    validator.body('group_by', 'Group_by must be a number').isNumeric(),
+    validator.body('group_by', 'Group_by must be a number between 1 and 50').isInt({min:1, max:50}),
     validator.sanitizeBody('group_by').escape(),
 
-    validator.body('duration', 'Duration must be a number').isNumeric(),
+    validator.body('duration', 'Duration must be a number between 1 and 180').isInt({min:1, max:180}),
     validator.sanitizeBody('duration').escape(),
 
     validator.sanitizeBody('seed').escape(),

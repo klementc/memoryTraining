@@ -8,13 +8,13 @@ exports.pi_create_get = function(req, res) {
 
 exports.pi_create_post = [
   // parse parameters
-  validator.body('from', 'From must be an').isNumeric(),
+  validator.body('from', 'From must be an').isInt({min:0, max:50000}),
   validator.sanitizeBody('from').escape(),
 
-  validator.body('nbLines', 'Line number must be a number').isNumeric(),
+  validator.body('nbLines', 'Line number must be a number between 1 and 500').isInt({min:1, max:500}),
   validator.sanitizeBody('nbLines').escape(),
 
-  validator.body('group_by', 'Group_by must be a number').isNumeric(),
+  validator.body('group_by', 'Group_by must be a number between 1 and 50').isInt({min:1, max:50}),
   validator.sanitizeBody('group_by').escape(),
 
   validator.sanitizeBody('task').escape(),
@@ -57,7 +57,7 @@ exports.pi_create_post = [
       // start learn task
       if(req.body.task=="learn") {
         var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by);
-        console.log(numList);
+        //console.log(numList);
         // render page showing the requested digits of pi 
         res.render('pi_show',{
           title:'Showing decimals of pi',

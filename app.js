@@ -9,6 +9,7 @@ var gameRouter = require('./routes/game');
 var numbersRouter = require('./routes/numbers')
 var wordsRouter = require('./routes/words');
 var piRouter = require('./routes/pi');
+var flashWordsRouter = require('./routes/flashWords')
 
 var compression = require('compression');
 var helmet = require('helmet');
@@ -34,6 +35,7 @@ app.use('/game/', gameRouter);
 app.use('/game/numbers/', numbersRouter);
 app.use('/game/words/', wordsRouter);
 app.use('/game/pi/', piRouter);
+app.use('/game/flash_words/', flashWordsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

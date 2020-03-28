@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h1= title
+  h1 Flash Words recall
   hr
 
   if err
@@ -15,7 +15,7 @@ block content
     br
     div(class="corrzone")
       - var i = 0
-      each valc, index in correct
+      each valc, index in word_list
         - var c = t[index]
         if c == undefined
           - c = '_'
@@ -46,6 +46,5 @@ block content
 
         input#seed.form-control(type='hidden', name='seed' value=seed)
         input#size.form-control(type='hidden', name='size' value=size)
-        input#row.form-control(type='hidden', name='row' value=row)
-        input(type='hidden', name='base' value=base)
+        input#task.form-control(type='hidden', name='task' value='corr')
       button.btn.btn-primary(type='submit') Submit

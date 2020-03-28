@@ -84,7 +84,7 @@ exports.word_verify = function(req, res) {
 }
 
 /** fetch random words from dictionnary to memorize from a seed */
-function get_word_list_from_seed(seed, nLine, lSize, binary) {
+function get_word_list_from_seed(seed, nLine, lSize) {
   const random = new Random(seed);
 
   // https://stackoverflow.com/questions/6831918/node-js-read-a-text-file-into-an-array-each-line-an-item-in-the-array

@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  h1 #{title}
+  hr
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='amount') Number of words:
+      input#amount.form-control(type='number', placeholder='10', name='amount', value=(undefined===amount ? '10' : amount.name))
+
+      label(for='duration') Duration per word (s):
+      input#duration.form-control(type='number', placeholder='3', name='duration', value=(undefined===duration ? '3' : duration.name))
+
+      label(for='seed') Seed (optional):
+      input#seed.form-control(type='number', step="any", placeholder='', name='seed', value=(undefined===seed ? '' : seed.name))
+      
+      input(name="task" value="play" type="hidden")
+
+      br
+      br
+      label(for="language") Language:
+      select(class="language" name="language")
+        option(value="en-us") en-us
+
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors 
+   ul
+    for error in errors
+     li!= error.msg

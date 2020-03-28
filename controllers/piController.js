@@ -3,7 +3,7 @@ var async = require('async');
 var crypto = require('crypto');
 
 exports.pi_create_get = function(req, res) {
-  res.render('pi_form', {title: 'Start a PI Game'});
+  res.render('pi_form', {title: 'Famous numbers memorization'});
 };
 
 exports.pi_create_post = [
@@ -18,6 +18,7 @@ exports.pi_create_post = [
   validator.sanitizeBody('group_by').escape(),
 
   validator.sanitizeBody('task').escape(),
+  validator.sanitizeBody('number').escape(),
 
   // create the game or show errors
   (req, res, next) => {
@@ -25,16 +26,22 @@ exports.pi_create_post = [
 
         // start recall task
     if(req.body.task == "recall") {
-      var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by);
-      console.log(numList);
+      // pi by default
+      var fname='ressources/PI50K_DP.TXT'
+      if(req.body.number == "pi") fname='ressources/PI50K_DP.TXT';
+      else if(req.body.number == "phi") fname='ressources/phi_50k.txt'; 
+      else if(req.body.number == "sq2") fname='ressources/sq2.txt'; 
+      console.log(fname)
+      var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by, fname);
       // render page showing the requested digits of pi 
 
       res.render('pi_recall',{
-        title:'Showing decimals of pi',
+        title:'Showing decimals of number',
         size: req.body.nbLines*req.body.group_by,
         recall: req.body.recall,
         task: req.body.task,
-        numList: numList
+        numList: numList,
+        number: req.body.number
       });
     }
     // perform correction after user's recall
@@ -49,18 +56,23 @@ exports.pi_create_post = [
     }
     else if(! err.isEmpty()) {
         res.render('pi_form', {
-            title:'Start a PI Game',
+            title:'Start a decimal recall Game',
             errors: err.array()
         })
         return;
     }else {
       // start learn task
       if(req.body.task=="learn") {
-        var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by);
+        var fname='ressources/PI50K_DP.TXT'
+        if(req.body.number == "pi") fname='ressources/PI50K_DP.TXT';
+        else if(req.body.number == "phi") fname='ressources/phi_50k.txt'; 
+        else if(req.body.number == "sq2") fname='ressources/sq2.txt'; 
+        console.log(fname)
+        var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by, fname);
         //console.log(numList);
         // render page showing the requested digits of pi 
         res.render('pi_show',{
-          title:'Showing decimals of pi',
+          title:'Showing decimals of number',
           from: req.body.from,
           nbLines: req.body.nbLines,
           group_by: req.body.group_by,
@@ -74,10 +86,10 @@ exports.pi_create_post = [
 
 
 /** fetch decimals from file to memorize*/
-function get_decimals(start,len) {
+function get_decimals(start,len, file) {
   // https://stackoverflow.com/questions/6831918/node-js-read-a-text-file-into-an-array-each-line-an-item-in-the-array
   var fs = require('fs');
-  var array = fs.readFileSync('ressources/PI50K_DP.TXT').toString().trim();
+  var array = fs.readFileSync(file).toString().trim();
   //console.log(array);
 
   return array.substr(start, len);

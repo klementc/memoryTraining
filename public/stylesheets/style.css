@@ -20,3 +20,11 @@ a {
 .corrzone{
   font-size: 200%;
 }
+
+.clicked {
+  background-color: red;
+}
+
+.clickedcorr {
+  background-color: green;
+}

@@ -1,0 +1,92 @@
+extends layout
+
+block content
+  h1 Grid mem
+  strong(id="score") Score: #
+  hr
+
+  h2(id="time") Go!
+
+  div(id="memZone" class="table-responsive")
+    table(id="grid" class="table table-bordered")
+      tbody
+        - var i = 0
+        while i < 8
+          - var j = 0
+          tr
+          while j < 8
+            td
+              | ?
+            - j++
+          -i++
+  button(id="validate" value="Validate" name="validate") Validate
+
+  script. 
+    var timer = 20; 
+    $(document.body).on('click', 'td', changeColor);
+    function changeColor() {
+      const $this = $(this);
+      if ($this.hasClass("clicked")) {
+        $this.removeClass("clicked")
+      } else {
+        $this.addClass("clicked");
+      }
+    }
+
+    var vals = [];
+    function init(){
+      var table = document.getElementById("grid");
+      for (var k = 0, row; row = table.rows[k]; k++) {
+        for (var l = 0, col; col = row.cells[l]; l++) {
+          v = Math.round(Math.random())
+          if(v) {
+            table.rows[k].cells[l].classList.add("clicked");
+            vals.push([k,l]);
+          }
+        }  
+      }
+    }
+    function clear(){
+      var table = document.getElementById("grid");
+      for (var k = 0, row; row = table.rows[k]; k++) {
+        for (var l = 0, col; col = row.cells[l]; l++) {
+          table.rows[k].cells[l].classList.remove("clicked");
+        }  
+      }
+    }
+    
+    function verif(){
+      var score = 0;
+      var table = document.getElementById("grid");
+      for (var k = 0, row; row = table.rows[k]; k++) {
+        for (var l = 0, col; col = row.cells[l]; l++) {
+          if( (vals.find(o => (o.indexOf(k)!=-1 && o.indexOf(l)!=-1)) && table.rows[k].cells[l].className=="clicked") || (!vals.find(o => (o.indexOf(k)!=-1 && o.indexOf(l)!=-1)) && table.rows[k].cells[l].className!="clicked")){
+            score++;
+          }
+          if(vals.find(o => (o.indexOf(k)!=-1 && o.indexOf(l)!=-1))){
+            table.rows[k].cells[l].classList.add("clickedcorr");
+          }
+        }  
+      }
+      document.getElementById("score").innerHTML = "Score: "+score+"!"; 
+    }
+
+    var p = document.getElementById("validate")
+    p.onclick = verif;
+    var t = 0;
+    var i = setInterval(function() {
+      t+=1;
+      document.getElementById("time").innerHTML = timer-t+" ";
+      if(timer-t == 0){
+        clearInterval(i)
+      }
+    }, 1000);
+
+    setTimeout(function () {
+      clearInterval(i);
+      document.getElementById("time").innerHTML="<strong>Finished</strong>";
+      clear();
+    }
+    , timer*1000);
+
+    init();

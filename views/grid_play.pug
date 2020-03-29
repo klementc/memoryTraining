@@ -5,8 +5,7 @@ block content
   strong(id="score") Score: #
   hr
   h2(id="time") Go!
-  h2(id="task") Memorize!
-  p(id='descr') t
+  p(id='descr') 
   hr
 
   div(id="memZone" class="table-responsive")
@@ -90,7 +89,6 @@ block content
       clear();
       document.getElementById("validate").disabled = false;
       $(document.body).on('click', 'td', changeColor);
-      document.getElementById("task").innerHTML = "Recall!";
       document.getElementById("descr").innerHTML="Activate the cells that were previously activated, before clicking on validate.";
     }
     , (timer)*1000);

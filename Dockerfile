@@ -15,5 +15,9 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+# fetch pictures
+RUN mkdir -p ressources/pics
+RUN bash getPics.sh
+
 EXPOSE 3000
 CMD [ "npm", "run", "deploy" ]

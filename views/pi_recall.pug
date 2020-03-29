@@ -39,7 +39,7 @@ block content
     form(method='POST' action='')
       div.form-group
         label(for='recall') Recall:
-        input#recall.form-control(type='input' placeholder='recall' name='recall')
+        input#recall.form-control(type='input' placeholder='recall' name='recall' autocomplete='off')
 
         input#task.form-control(type='hidden' name='task' value="corr")
         input#size.form-control(type='hidden' name='size' value=size)

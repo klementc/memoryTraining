@@ -4,26 +4,28 @@ block content
   h1 Grid mem
   strong(id="score") Score: #
   hr
-
   h2(id="time") Go!
+  h2(id="task") Memorize!
+  p(id='descr') t
+  hr
 
   div(id="memZone" class="table-responsive")
     table(id="grid" class="table table-bordered")
       tbody
         - var i = 0
-        while i < 8
+        while i < width
           - var j = 0
           tr
-          while j < 8
+          while j < height
             td
               | ?
             - j++
           -i++
-  button(id="validate" value="Validate" name="validate") Validate
+  button(id="validate" value="Validate" name="validate" class="btn btn-primary" disabled) Validate
 
   script. 
-    var timer = 20; 
-    $(document.body).on('click', 'td', changeColor);
+    var timer = #{duration}+1; 
+    
     function changeColor() {
       const $this = $(this);
       if ($this.hasClass("clicked")) {
@@ -75,18 +77,22 @@ block content
     p.onclick = verif;
     var t = 0;
     var i = setInterval(function() {
-      t+=1;
-      document.getElementById("time").innerHTML = timer-t+" ";
       if(timer-t == 0){
         clearInterval(i)
       }
+      t+=1;
+      document.getElementById("time").innerHTML = timer-t;
     }, 1000);
 
     setTimeout(function () {
       clearInterval(i);
-      document.getElementById("time").innerHTML="<strong>Finished</strong>";
+      document.getElementById("time").innerHTML="Finished";
       clear();
+      document.getElementById("validate").disabled = false;
+      $(document.body).on('click', 'td', changeColor);
+      document.getElementById("task").innerHTML = "Recall!";
+      document.getElementById("descr").innerHTML="Activate the cells that were previously activated, before clicking on validate.";
     }
-    , timer*1000);
+    , (timer)*1000);
 
     init();

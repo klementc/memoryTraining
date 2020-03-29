@@ -2,6 +2,22 @@ extends layout
 
 block content
   h1 #{title}
+  button(type="button" class="float-right btn btn-info btn-lg" data-toggle="modal" data-target="#myModal") Rules
+  div(id="myModal" class="modal fade" role="dialog")
+    div(class="modal-dialog")
+      div(class="modal-content")
+        div(class="modal-header")
+          button(type="button" class="close" data-dismiss="modal") &times;
+          h4(class="modal-title") Rules
+        div(class="mobal-body")
+          | This game consists in remembering sets of words.
+          br
+          | Select the amount of sets you want to remember, as well as their size.
+          br
+          | Then you will have some time to remember them. Once time is up, enter all these words (one space between each word) in the recall box.
+          br
+          strong sidenote: 
+          | the seed is an integer used for data generation. If you put the same seed for several games, you will have the same words (this can be used to replay, or play the same game as a friend).
   hr
 
   form(method='POST' action='')

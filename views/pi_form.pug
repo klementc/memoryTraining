@@ -2,6 +2,22 @@ extends layout
 
 block content
   h1 #{title}
+  button(type="button" class="float-right btn btn-info btn-lg" data-toggle="modal" data-target="#myModal") Rules
+  div(id="myModal" class="modal fade" role="dialog")
+    div(class="modal-dialog")
+      div(class="modal-content")
+        div(class="modal-header")
+          button(type="button" class="close" data-dismiss="modal") &times;
+          h4(class="modal-title") Rules
+        div(class="mobal-body")
+          | This game consists in remembering famous numbers.
+          br
+          | Select the number you want to learn or recall.
+          br
+          | If you choose to learn, the requested digits will be shown to you, if you choose to recall, you will be prompted to enter the digits your specified!
+          br
+          strong sidenote: 
+          | the seed is an integer used for data generation. If you put the same seed for several games, you will have the same words (this can be used to replay, or play the same game as a friend).
   hr
   p Learn or recall up to 50K decimals of famous remarkable numbers (digit 0 = first digit after the dot). 
    

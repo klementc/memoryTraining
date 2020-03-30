@@ -9,4 +9,6 @@ router.get('/', function(req, res, next) {
 
 router.post('/', picture_controller.picture_create_post);
 
+router.post('/verify', picture_controller.picture_verify);
+
 module.exports = router;

@@ -5,6 +5,7 @@ block content
   strong Pictures taken from https://github.com/MariaLetta/mega-doodles-pack Thanks!
   br
   hr
+  p #{picList} #{seed}
   div(id="score")
   h2(id="time") Go!
   hr
@@ -13,13 +14,11 @@ block content
 
 
   script. 
-    var pics = [];
-    var verif = [];
+    var pics = "#{picList}".split(",");
+    var pos = "#{pos}".split(',');
+    var rot = "#{rot}".split(',');
     var draw;
     var already=0;
-
-    for(var i=0;i<#{nbPics};i++)
-      pics.push(1+Math.round(Math.random()*150));
     
     function init(){
       if(already<2){
@@ -31,44 +30,18 @@ block content
 
         for(var i=0;i<pics.length;i++){
         var image = draw.image('/images/pics/doodlep-'+pics[i]+'.svg')
-        image.size(70, 70).move(Math.round(Math.random()*500),Math.round(Math.random()*500));
-        image.transform({rotate: Math.round(Math.random()*360)});
+        image.size(70, 70).move(pos[2*i],pos[2*i+1]);
+        image.transform({rotate: rot[i]});
         }
       }
       already++;
     }
 
-    function validate() {
-      var score = 0;
-      var max = 0;
-      for(var i=0;i<verif.length;i++){
-        var el = document.getElementById(verif[i]);
-        if(pics.indexOf(verif[i])!=-1) max++;
-        if(el.checked==true && pics.indexOf(verif[i])!=-1){
-          score++;
-        }else if((el.checked==true && pics.indexOf(verif[i])==-1)||(el.checked==false && pics.indexOf(verif[i])!=-1)){
-          score--;
-        }
-      }
-      var d = document.getElementById("score");
-      d.innerHTML="<h2>Score: "+score+" / "+max+"</h2>";
-      init();
-    }
-    setTimeout(function () {
-      for(var i=0;i<40;i++)
-        verif.push(Math.round(1+Math.random()*150));
-      verif = Array.from(new Set(verif))
-      var b = document.getElementById('drawing');
-      b.innerHTML="";
-      var c = document.getElementById('corr');
-      var text="<table>";
-      for(var i=0;i<verif.length;i++){
-        if(i%5==0) text+="</tr><tr>"
-        text+="<td><input type='checkbox' id='"+verif[i]+"' /><label for='"+verif[i]+"'><img src='/images/pics/doodlep-"+verif[i]+".svg' width='50px' height='50px'/></label></td>";
-      }
-      text+="</table><input type='submit' value='Validate' class='btn btn-primary' onclick='return validate();'/></form>"
-      c.innerHTML=text;
 
+    setTimeout(function () {
+      var form = $('<form action="/game/picture/verify" method="post"></form>');
+      $('body').append(form);
+      form.submit();
     }, (#{duration}+1)*1000);
 
     var t = 0;

@@ -7,4 +7,8 @@ var flash_controller = require('../controllers/flashWordsController');
 router.get('/', flash_controller.flash_create_get);
 router.post('/', flash_controller.flash_create_post);
 
+// verify a played game
+router.post('/verify', flash_controller.flash_verify);
+
+
 module.exports = router;

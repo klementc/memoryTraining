@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('express-session');
+const { uuid } = require('uuidv4');
 
 var indexRouter = require('./routes/index');
 var gameRouter = require('./routes/game');
@@ -17,6 +19,15 @@ var compression = require('compression');
 var helmet = require('helmet');
 
 var app = express();
+
+app.use(session({
+  genid: function(req) {
+    return uuid() // use UUIDs for session IDs
+  },
+  secret: 'memgames loves cat',
+  resave:true,
+  saveUninitialized: true
+}))
 
 app.use(helmet());
 // view engine setup

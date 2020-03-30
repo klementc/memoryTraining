@@ -32,34 +32,14 @@ exports.flash_create_post = [
   (req, res, next) => {
     const err = validator.validationResult(req);
 
-    if(! err.isEmpty() && req.body.task!='recall' && req.body.task != 'corr') {
+    if(! err.isEmpty()) {
         res.render('flash_words_form', {
             title:'Start a decimal recall Game',
             errors: err.array()
         })
         return;
     }
-    // perform correction after user's recall
-    else if(req.body.task == "corr") {
-      console.log("corr "+req.body.seed);
-      res.render('flash_words_recall',{
-        size: req.body.size,
-        task: req.body.task,
-        recall: req.body.recall,
-        seed: req.body.seed,
-        word_list: get_word_list_from_seed(MersenneTwister19937.seed(req.body.seed), req.body.size,1)
-      });
-    }
-    // start recall task
-    else if(req.body.task == "recall") {
-        console.log("recall"+req.body.seed+" "+req.body.size);
-        res.render('flash_words_recall', {
-            word_list: get_word_list_from_seed(MersenneTwister19937.seed(req.body.seed), req.body.size,1),
-            seed:req.body.seed,
-            size:req.body.size
-        });
-        }
-    else if(req.body.task=="play"){
+    else {
         // start learn task
         var seed
         // create random seed if not provided
@@ -68,18 +48,42 @@ exports.flash_create_post = [
         else
             seed = randU32Sync();
         
+        // init session data
+        req.session.seed = seed;
+        req.session.size = req.body.amount;
+
         res.render('flash_words_play', {
             title: 'Play Flash Words', 
             duration: req.body.duration,
             seed:seed,
             size:req.body.amount,
-            row:req.body.group_by,
-            base: req.body.base,
             word_list: get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, 1)
         });
     }
   }
 ];
+
+/** Perform correction after user's recall validation */
+exports.flash_verify = function(req, res) {
+  var err=""
+  
+  if(! req.session.seed || ! req.session.size) {
+      err="Play a game before verifying";
+      res.render('flash_words_recall',{
+        title:'Validate your recall',
+        err:err
+    });
+  } else {      
+    
+    res.render('flash_words_recall', {
+        word_list: get_word_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.size,1),
+        seed:req.session.seed,
+        size:req.session.size,
+        recall: req.body.recall
+    });
+  }
+}
+
 
 /** fetch random words from dictionnary to memorize from a seed */
 function get_word_list_from_seed(seed, nLine, lSize) {

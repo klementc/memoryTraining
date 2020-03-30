@@ -21,10 +21,12 @@ exports.number_create_post = [
     validator.body('group_by', 'Group_by must be a number between 1 and 50').isInt({min:1, max:50}),
     validator.sanitizeBody('group_by').escape(),
 
-    validator.body('duration', 'Duration must be a number between 1 and 180').isInt({min:1, max:180}),
+    validator.body('duration', 'Duration must be a number between 1 and 180').isInt({min:0, max:180}),
     validator.sanitizeBody('duration').escape(),
 
     validator.sanitizeBody('seed').escape(),
+
+    validator.sanitizeBody('base').escape(),
 
     // create the game or show errors
     (req, res, next) => {
@@ -45,6 +47,12 @@ exports.number_create_post = [
             else
                 seed = randU32Sync();
             
+            // add data to session
+            req.session.seed = seed;
+            req.session.amount = req.body.amount;
+            req.session.group_by = req.body.group_by;
+            req.session.base = req.body.base;
+            
             res.render('number_play', {
                 title: 'Play Words', 
                 number_list: get_number_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by, req.body.base=="binary"),
@@ -63,18 +71,20 @@ exports.number_create_post = [
 exports.number_verify = function(req, res) {
     var err=""
     
-    if(! req.body.seed || ! req.body.size)
+    if(! req.session.seed || ! req.session.amount || ! req.session.group_by || ! req.session.base) {
         err="Play a game before verifying";
-    else {
-        
         res.render('numbers_verify',{
             title:'Validate your recall',
-            row:req.body.row,
-            base: req.body.base,
-            seed:req.body.seed,
-            size: req.body.size,
+            err:err});
+    } else {
+        res.render('numbers_verify',{
+            title:'Validate your recall',
+            row:req.session.amount,
+            base: req.session.base,
+            seed: req.session.seed,
+            size: req.session.amount*req.session.group_by,
             recall: req.body.recall,
-            correct: get_number_list_from_seed(MersenneTwister19937.seed(req.body.seed), req.body.size, 1, req.body.base=="binary"),
+            correct: get_number_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.amount*req.session.group_by, 1, req.session.base=="binary"),
             err:err});
     }
 }

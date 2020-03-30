@@ -9,4 +9,6 @@ var pi_controller = require('../controllers/piController');
 router.get('/', pi_controller.pi_create_get);
 router.post('/', pi_controller.pi_create_post);
 
+router.post('/verify', pi_controller.pi_verify);
+
 module.exports = router;

@@ -36,13 +36,9 @@ block content
       hr
     p Enter the numbers in the following text input, without any separation between digits (put a random character for the ones you don't remember).
 
-    form(method='POST' action='')
+    form(method='POST' action='/game/pi/verify')
       div.form-group
         label(for='recall') Recall:
         input#recall.form-control(type='input' placeholder='recall' name='recall' autocomplete='off')
-
-        input#task.form-control(type='hidden' name='task' value="corr")
-        input#size.form-control(type='hidden' name='size' value=size)
-        input#numList.form-control(type='hidden' name='numList' value=numList)
 
       button.btn.btn-primary(type='submit') Submit

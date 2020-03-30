@@ -24,59 +24,51 @@ exports.pi_create_post = [
   (req, res, next) => {
     const err = validator.validationResult(req);
 
-        // start recall task
-    if(req.body.task == "recall") {
-      // pi by default
-      var fname='ressources/PI50K_DP.TXT'
-      if(req.body.number == "pi") fname='ressources/PI50K_DP.TXT';
-      else if(req.body.number == "phi") fname='ressources/phi_50k.txt'; 
-      else if(req.body.number == "sq2") fname='ressources/sq2.txt'; 
-      console.log(fname)
-      var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by, fname);
-      // render page showing the requested digits of pi 
+    // start recall task
+    if(! err.isEmpty()) {
+      res.render('pi_form', {
+          title:'Start a Pi Game',
+          errors: err.array()
+      })
+      return;
+      }if(req.body.task == "recall") {
+      var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by, getfname(req.body.number));
+
+      // session data
+      req.session.pifrom = req.body.from;
+      req.session.pinbLines = req.body.nbLines;
+      req.session.pigroup_by = req.body.group_by;
+      req.session.pinumber = req.body.number;
+      req.session.pisize = req.body.group_by*req.body.nbLines;
 
       res.render('pi_recall',{
         title:'Showing decimals of number',
         size: req.body.nbLines*req.body.group_by,
         recall: req.body.recall,
-        task: req.body.task,
         numList: numList,
-        number: req.body.number
+        number: req.body.number,
       });
-    }
-    // perform correction after user's recall
-    else if(req.body.task == "corr") {
-      res.render('pi_recall',{
-        title:'Validate your recall',
-        size: req.body.size,
-        task: req.body.task,
-        numList: req.body.numList,
-        recall: req.body.recall
-      });
-    }
-    else if(! err.isEmpty()) {
-        res.render('pi_form', {
-            title:'Start a decimal recall Game',
-            errors: err.array()
-        })
-        return;
-    }else {
+    } else {
       // start learn task
       if(req.body.task=="learn") {
-        var fname='ressources/PI50K_DP.TXT'
-        if(req.body.number == "pi") fname='ressources/PI50K_DP.TXT';
-        else if(req.body.number == "phi") fname='ressources/phi_50k.txt'; 
-        else if(req.body.number == "sq2") fname='ressources/sq2.txt'; 
-        console.log(fname)
-        var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by, fname);
+
+        var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by, getfname(req.body.number));
+
+        // session data
+        req.session.pifrom = req.body.from;
+        req.session.pinbLines = req.body.nbLines;
+        req.session.pigroup_by = req.body.group_by;
+        req.session.pinumber = req.body.number;
+        req.session.pisize = req.body.group_by*req.body.nbLines;
+
         //console.log(numList);
         // render page showing the requested digits of pi 
         res.render('pi_show',{
           title:'Showing decimals of number',
           from: req.body.from,
+          size: req.session.pisize,
           nbLines: req.body.nbLines,
           group_by: req.body.group_by,
-          task: req.body.task,
           numList: numList
         });
       }
@@ -84,6 +76,28 @@ exports.pi_create_post = [
   }
 ]
 
+
+/** Perform correction after user's recall validation */
+exports.pi_verify = function(req, res) {
+  var err=""
+  //console.log(req.session);
+  if(! req.session.pisize || ! req.session.pinumber) {
+      err="Play a game before verifying";
+      res.render('pi_recall',{
+        title:'Validate your recall',
+        err:err
+    });
+  } else{
+    res.render('pi_recall',{
+      title:'Validate your recall',
+      size: req.session.pisize,
+      number: req.session.pinumber,
+      numList:  get_decimals(req.session.pifrom, req.session.pisize, getfname(req.session.pinumber)),
+      recall: req.body.recall,
+      number: req.session.pinumber
+    });
+  }
+}
 
 /** fetch decimals from file to memorize*/
 function get_decimals(start,len, file) {
@@ -93,4 +107,13 @@ function get_decimals(start,len, file) {
   //console.log(array);
 
   return array.substr(start, len);
+}
+
+function getfname(num) {
+  var fname;
+  if(num == "pi") fname='ressources/PI50K_DP.TXT';
+  else if(num == "phi") fname='ressources/phi_50k.txt'; 
+  else fname='ressources/sq2.txt'; 
+
+  return fname
 }

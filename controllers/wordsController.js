@@ -26,7 +26,7 @@ exports.word_create_post = [
   validator.body('group_by', 'Group_by must be a number between 1 and 10').isInt({min:1, max:10}),
   validator.sanitizeBody('group_by').escape(),
 
-  validator.body('duration', 'Duration must be a number between 1 and 180').isInt({min:1, max:180}),
+  validator.body('duration', 'Duration must be a number between 1 and 180').isInt({min:0, max:180}),
   validator.sanitizeBody('duration').escape(),
 
   validator.sanitizeBody('seed').escape(),
@@ -42,24 +42,31 @@ exports.word_create_post = [
           })
           return;
       }else {
-          var seed;
+            var seed;
 
-          // create random seed if not provided
-          if(req.body.seed)
-              seed = req.body.seed;
-          else
-              seed = randU32Sync();
-          
-          res.render('word_play', {
-              title: 'Play Words', 
-              word_list: get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by),
-              timer: req.body.duration*60,
-              seed:seed,
-              size:req.body.amount*req.body.group_by,
-              row:req.body.group_by,
-              base: req.body.base,
-              verifUrl: "/game/words/verify"
-          });
+            // create random seed if not provided
+            if(req.body.seed)
+                seed = req.body.seed;
+            else
+                seed = randU32Sync();
+
+            // set session data
+            req.session.amount = req.body.amount;
+            req.session.group_by = req.body.group_by;
+            req.session.seed = seed;
+            req.session.size = req.body.amount*req.body.group_by;
+
+            // render game page
+            res.render('word_play', {
+                title: 'Play Words', 
+                word_list: get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by),
+                timer: req.body.duration*60,
+                seed:seed,
+                size:req.body.amount*req.body.group_by,
+                row:req.body.group_by,
+                base: req.body.base,
+                verifUrl: "/game/words/verify"
+            });
       }
   }
 ];
@@ -68,17 +75,21 @@ exports.word_create_post = [
 exports.word_verify = function(req, res) {
   var err=""
   
-  if(! req.body.seed || ! req.body.size)
+  if(! req.session.amount || ! req.session.group_by || ! req.session.seed || ! req.session.size) {
       err="Play a game before verifying";
-  else {      
+      res.render('words_verify',{
+        title:'Validate your recall',
+        err:err
+    });
+    } else {      
       res.render('words_verify',{
           title:'Validate your recall',
-          row:req.body.row,
-          base: req.body.base,
-          seed:req.body.seed,
-          size: req.body.size,
+          row:req.session.row,
+          base: req.session.base,
+          seed:req.session.seed,
+          size: req.session.size,
           recall: req.body.recall,
-          correct: get_word_list_from_seed(MersenneTwister19937.seed(req.body.seed), req.body.size, 1),
+          correct: get_word_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.size, 1),
           err:err});
   }
 }

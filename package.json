@@ -15,6 +15,7 @@
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "express-session": "^1.17.0",
     "express-validator": "^6.4.0",
     "fs": "0.0.1-security",
     "helmet": "^3.22.0",
@@ -23,7 +24,8 @@
     "mongoose": "^5.9.6",
     "morgan": "~1.9.1",
     "pug": "^2.0.4",
-    "random-js": "^2.1.0"
+    "random-js": "^2.1.0",
+    "uuidv4": "^6.0.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

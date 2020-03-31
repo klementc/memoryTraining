@@ -32,11 +32,11 @@ exports.pi_create_post = [
       })
       return;
       }if(req.body.task == "recall") {
-      var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by, getfname(req.body.number));
+      var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by, getfname(req.body.number), req.body.group_by);
 
       // session data
       req.session.pifrom = req.body.from;
-      req.session.pinbLines = req.body.nbLines;
+      req.session.piamount = req.body.nbLines;
       req.session.pigroup_by = req.body.group_by;
       req.session.pinumber = req.body.number;
       req.session.pisize = req.body.group_by*req.body.nbLines;
@@ -47,16 +47,19 @@ exports.pi_create_post = [
         recall: req.body.recall,
         numList: numList,
         number: req.body.number,
+        from: req.session.pifrom,
+        group_by: req.session.pigroup_by,
+        amount: req.session.piamount,
       });
     } else {
       // start learn task
       if(req.body.task=="learn") {
 
-        var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by, getfname(req.body.number));
+        var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by, getfname(req.body.number),req.body.group_by);
 
         // session data
         req.session.pifrom = req.body.from;
-        req.session.pinbLines = req.body.nbLines;
+        req.session.piamount = req.body.nbLines;
         req.session.pigroup_by = req.body.group_by;
         req.session.pinumber = req.body.number;
         req.session.pisize = req.body.group_by*req.body.nbLines;
@@ -69,6 +72,8 @@ exports.pi_create_post = [
           size: req.session.pisize,
           nbLines: req.body.nbLines,
           group_by: req.body.group_by,
+          group_by: req.session.pigroup_by,
+          amount: req.session.piamount,
           numList: numList
         });
       }
@@ -88,25 +93,56 @@ exports.pi_verify = function(req, res) {
         err:err
     });
   } else{
+    var recall;
+    var nList = [];
+    var score = 0;
+    var lg=[];
+    var correct = get_decimals(req.session.pifrom, req.session.piamount*req.session.pigroup_by, getfname(req.session.pinumber),req.session.pigroup_by);
+    console.log("correct:"+score);
+
+    for(var i=0;i<req.session.piamount;i++) {
+      console.log(req.body[i]);
+        var ok = true;
+        if(undefined!=req.body[i] && req.body[i]!=""){
+            nList.push(req.body[i]);
+            recall = true;
+            for(var j=0;j<Math.max(req.body[i].length,req.session.pigroup_by);j++) {
+                if(req.body[i][j]==correct[i][j])
+                    score++;
+                else
+                    ok=false;
+            }
+        }else{
+            nList.push([]);
+            ok=false;
+        }
+        if(ok) lg.push("bg-success");
+        else lg.push("bg-danger");
+    }
+    console.log("c"+score)
     res.render('pi_recall',{
       title:'Validate your recall',
-      size: req.session.pisize,
+      score: score,
+      group_by: req.session.pigroup_by,
+      amount: req.session.piamount,
       number: req.session.pinumber,
-      numList:  get_decimals(req.session.pifrom, req.session.pisize, getfname(req.session.pinumber)),
-      recall: req.body.recall,
-      number: req.session.pinumber
+      recall: recall,
+      correct: correct,
+      nList: nList,
+      number: req.session.pinumber,
+      lg: lg,
     });
   }
 }
 
 /** fetch decimals from file to memorize*/
-function get_decimals(start,len, file) {
+function get_decimals(start,len, file, gb) {
   // https://stackoverflow.com/questions/6831918/node-js-read-a-text-file-into-an-array-each-line-an-item-in-the-array
   var fs = require('fs');
   var array = fs.readFileSync(file).toString().trim();
-  //console.log(array);
+  var v = array.substr(start,len);
 
-  return array.substr(start, len);
+  return chunkString(array.substr(start, len), gb);
 }
 
 function getfname(num) {
@@ -115,5 +151,8 @@ function getfname(num) {
   else if(num == "phi") fname='ressources/phi_50k.txt'; 
   else fname='ressources/sq2.txt'; 
 
-  return fname
+  return fname;
+}
+function chunkString(str, length) {
+  return str.match(new RegExp('.{1,' + length + '}', 'g'));
 }

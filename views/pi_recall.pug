@@ -7,30 +7,27 @@ block content
   if err
     h2 #{err}
   else if recall
-    h2(id='score') Your score: #{score}
-    - var score = 0
+    h2(id='score') Your score: #{score}/#{amount*group_by}
     hr
-    strong Correction:
-    br
-    div(class="corrzone")
-      - var i = 0
-      each valc, index in numList
-        - var c = recall[index]
-        if c == undefined
-          - c = '_'
-        if valc == c
-          - score++
-          strong #{valc} : 
-          em(class="bg-success") #{c}
-        else
-          strong #{valc} : 
-          em(class="bg-danger") #{c}
-        | &nbsp; 
-        - i++
-        if i % row == 0
-          br
-    script.
-      document.getElementById("score").innerHTML="Your score: #{score}/#{size}";
+    table(class="table table-bordered")
+      thead
+        tr
+          th(scope='col') # Row
+          th(scope='col') Recall
+          th(scope='col') Correct
+      tbody
+        - var l = 0
+        - var cl = nList[l]
+        while l < amount
+          tr(class=lg[l])
+            th(scope='row') #{l}
+            td
+              each n in nList[l]
+                | #{n} 
+            td
+              each n in correct[l]
+                | #{n} 
+          - l++
   else
     strong Total numbers: #{size}
       hr
@@ -38,7 +35,19 @@ block content
 
     form(method='POST' action='/game/pi/verify')
       div.form-group
-        label(for='recall') Recall:
-        input#recall.form-control(type='input' placeholder='recall' name='recall' autocomplete='off')
+
+        table(class="table table-bordered table-striped table-hover")
+          thead
+            tr
+              th(scope='col') # Row
+              th(scope='col') Numbers
+          tbody
+            - var l = 0
+            while l < amount
+              tr
+                th(scope='row') #{parseInt(from)+(parseInt(l)*group_by)}
+                td
+                  input(type="input", name=l, maxlength=group_by)
+              - l++
 
       button.btn.btn-primary(type='submit') Submit

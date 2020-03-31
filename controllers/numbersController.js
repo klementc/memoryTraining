@@ -26,6 +26,7 @@ exports.number_create_post = [
 
     validator.sanitizeBody('seed').escape(),
 
+    validator.body('base','Base must be either Binary or Decimal').isIn(['decimal', 'binary']),
     validator.sanitizeBody('base').escape(),
 
     // create the game or show errors
@@ -55,6 +56,8 @@ exports.number_create_post = [
             
             res.render('number_play', {
                 title: 'Play Words', 
+                amount: req.body.amount,
+                group_by: req.body.group_by,
                 number_list: get_number_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by, req.body.base=="binary"),
                 timer: req.body.duration*60,
                 seed:seed,
@@ -77,14 +80,43 @@ exports.number_verify = function(req, res) {
             title:'Validate your recall',
             err:err});
     } else {
+        var recall;
+        var nList = [];
+        var score = 0;
+        var lg=[];
+
+        var correct = get_number_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.amount, req.session.group_by, req.session.base=="binary");
+        for(var i=0;i<req.session.amount;i++) {
+            var ok = true;
+            if(undefined!=req.body[i] && req.body[i]!=""){
+                nList.push(req.body[i]);
+                recall = true;
+                for(var j=0;j<Math.max(req.body[i].length,req.session.group_by);j++) {
+                    if(req.body[i][j]==correct[i][j])
+                        score++;
+                    else
+                        ok=false;
+                }
+            }else{
+                nList.push([]);
+                ok=false;
+            }
+            if(ok) lg.push("bg-success");
+            else lg.push("bg-danger");
+        }
         res.render('numbers_verify',{
             title:'Validate your recall',
+            lg: lg,
             row:req.session.amount,
+            amount: req.session.amount,
+            group_by: req.session.group_by,
             base: req.session.base,
             seed: req.session.seed,
+            score: score,
             size: req.session.amount*req.session.group_by,
-            recall: req.body.recall,
-            correct: get_number_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.amount*req.session.group_by, 1, req.session.base=="binary"),
+            nList: nList,
+            recall: recall,
+            correct: correct,
             err:err});
     }
 }

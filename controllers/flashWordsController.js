@@ -26,6 +26,9 @@ exports.flash_create_post = [
   validator.body('duration', 'Duration must be a number between 1 and 10').isInt({min:1, max:10}),
   validator.sanitizeBody('duration').escape(),
 
+  validator.body('language','Please select a valid language').isIn(['en-us','fr']),
+  validator.sanitizeBody('language').escape(),
+  
   validator.sanitizeBody('seed').escape(),
 
 
@@ -50,14 +53,15 @@ exports.flash_create_post = [
         
         // init session data
         req.session.seed = seed;
-        req.session.size = req.body.amount;
+        req.session.amount = req.body.amount;
+        req.session.language = req.body.language;
 
         res.render('flash_words_play', {
             title: 'Play Flash Words', 
             duration: req.body.duration,
             seed:seed,
             size:req.body.amount,
-            word_list: get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, 1)
+            word_list: get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, 1, req.session.language)
         });
     }
   }
@@ -67,31 +71,65 @@ exports.flash_create_post = [
 exports.flash_verify = function(req, res) {
   var err=""
   
-  if(! req.session.seed || ! req.session.size) {
+  if(! req.session.seed || ! req.session.amount) {
       err="Play a game before verifying";
       res.render('flash_words_recall',{
         title:'Validate your recall',
         err:err
     });
   } else {      
-    
+    var recall;
+    var nList = [];
+    var score = 0;
+    var lg=[];
+
+    var correct = get_word_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.amount, 1, req.session.language)
+
+    for(var i=0;i<req.session.amount;i++) {
+      var ok = true;
+      
+        if(undefined!=req.body[i] && (''+req.body[i]).split(" ")!=[]){
+            var s = (''+req.body[i]).split(" ")
+            nList.push(s);
+            recall = true;
+            for(var j=0;j<correct[i].length;j++) {
+                if(s[j]==correct[i][j])
+                    score++;
+                else
+                    ok=false;
+            }
+        }else{
+            nList.push([]);
+            ok=false;
+        }
+        if(ok) lg.push("bg-success");
+        else lg.push("bg-danger");
+    }
+
     res.render('flash_words_recall', {
-        word_list: get_word_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.size,1),
+        score: score,
+        lg: lg,
+        nList: nList,
+        correct: get_word_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.amount,1, req.session.language),
         seed:req.session.seed,
-        size:req.session.size,
-        recall: req.body.recall
+        group_by: 1,
+        amount: req.session.amount,
+        recall: recall
     });
   }
 }
 
 
 /** fetch random words from dictionnary to memorize from a seed */
-function get_word_list_from_seed(seed, nLine, lSize) {
+function get_word_list_from_seed(seed, nLine, lSize, language) {
   const random = new Random(seed);
+
+  var lf = 'ressources/google-10000-english-usa.txt';
+  if(language=='fr') lf = 'ressources/francais.txt';
 
   // https://stackoverflow.com/questions/6831918/node-js-read-a-text-file-into-an-array-each-line-an-item-in-the-array
   var fs = require('fs');
-  var array = fs.readFileSync('ressources/google-10000-english-usa.txt').toString().split("\n");
+  var array = fs.readFileSync(lf).toString().trim().split(/\r?\n/);
   
   var nList = []
   for(var i=0; i<nLine; i++){

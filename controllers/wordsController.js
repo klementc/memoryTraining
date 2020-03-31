@@ -29,6 +29,9 @@ exports.word_create_post = [
   validator.body('duration', 'Duration must be a number between 1 and 180').isInt({min:0, max:180}),
   validator.sanitizeBody('duration').escape(),
 
+  validator.body('language','Please select a valid language').isIn(['en-us','fr']),
+  validator.sanitizeBody('language').escape(),
+
   validator.sanitizeBody('seed').escape(),
 
   // create the game or show errors
@@ -55,17 +58,20 @@ exports.word_create_post = [
             req.session.group_by = req.body.group_by;
             req.session.seed = seed;
             req.session.size = req.body.amount*req.body.group_by;
-
+            req.session.language = req.body.language;
+            
             // render game page
             res.render('word_play', {
                 title: 'Play Words', 
-                word_list: get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by),
+                word_list: get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by, req.session.language),
                 timer: req.body.duration*60,
                 seed:seed,
                 size:req.body.amount*req.body.group_by,
                 row:req.body.group_by,
                 base: req.body.base,
-                verifUrl: "/game/words/verify"
+                verifUrl: "/game/words/verify",
+                amount: req.session.amount,
+                group_by: req.session.group_by
             });
       }
   }
@@ -81,26 +87,63 @@ exports.word_verify = function(req, res) {
         title:'Validate your recall',
         err:err
     });
-    } else {      
+    } else {
+      var recall;
+      var nList = [];
+      var score = 0;
+      var lg=[];
+
+      var correct = get_word_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.amount, req.session.group_by, req.session.language)
+
+      for(var i=0;i<req.session.amount;i++) {
+        var ok = true;
+        
+          if(undefined!=req.body[i] && (''+req.body[i]).split(" ")!=[]){
+              var s = (''+req.body[i]).split(" ")
+              nList.push(s);
+              recall = true;
+              for(var j=0;j<correct[i].length;j++) {
+                  if(s[j]==correct[i][j])
+                      score++;
+                  else
+                      ok=false;
+              }
+          }else{
+              nList.push([]);
+              ok=false;
+          }
+          if(ok) lg.push("bg-success");
+          else lg.push("bg-danger");
+      }
+      
       res.render('words_verify',{
           title:'Validate your recall',
           row:req.session.row,
           base: req.session.base,
           seed:req.session.seed,
           size: req.session.size,
-          recall: req.body.recall,
-          correct: get_word_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.size, 1),
+          group_by: req.session.group_by,
+          amount: req.session.amount,
+          recall: recall,
+          lg: lg,
+          score: score,
+          nList: nList,
+          score: score,
+          correct: get_word_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.amount, req.session.group_by, req.session.language),
           err:err});
   }
 }
 
 /** fetch random words from dictionnary to memorize from a seed */
-function get_word_list_from_seed(seed, nLine, lSize) {
+function get_word_list_from_seed(seed, nLine, lSize, language) {
   const random = new Random(seed);
+
+  var lf = 'ressources/google-10000-english-usa.txt';
+  if(language=='fr') lf = 'ressources/francais.txt';
 
   // https://stackoverflow.com/questions/6831918/node-js-read-a-text-file-into-an-array-each-line-an-item-in-the-array
   var fs = require('fs');
-  var array = fs.readFileSync('ressources/google-10000-english-usa.txt').toString().split("\n");
+  var array = fs.readFileSync(lf).toString().trim().split(/\r?\n/);
   
   var nList = []
   for(var i=0; i<nLine; i++){

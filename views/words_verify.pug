@@ -3,35 +3,31 @@ extends layout
 block content
   h1= title
   hr
-
   if err
     h2 #{err}
   else if recall
-    h2(id='score') Your score: #{score}
-    - var score = 0
+    h2(id='score') Your score: #{score} / #{amount*group_by}
     hr
-    - var t = recall.split(" ");
-    strong Correction:
-    br
-    div(class="corrzone")
-      - var i = 0
-      each valc, index in correct
-        - var c = t[index]
-        if c == undefined
-          - c = '_'
-        if valc == c
-          - score++
-          strong #{valc} : 
-          em(class="bg-success") #{c}
-        else
-          strong #{valc} : 
-          em(class="bg-danger") #{c}
-        | &nbsp; 
-        - i++
-        if i % row == 0
-          br
-    script.
-      document.getElementById("score").innerHTML="Your score: #{score}/#{size}";
+    table(class="table table-bordered")
+      thead
+        tr
+          th(scope='col') # Row
+          th(scope='col') Recall
+          th(scope='col') Correct
+      tbody
+        - var l = 0
+        
+        while l < amount
+          - var cl = (''+nList[l]).split(" ")
+          tr(class=lg[l])
+            th(scope='row') #{l*group_by}
+            td
+              each n in cl
+                | #{n} 
+            td
+              each n in correct[l]
+                | #{n} 
+          - l++
   else
     strong For seed: #{seed}
     br
@@ -44,4 +40,17 @@ block content
         label(for='recall') Recall:
         input#recall.form-control(type='input' placeholder='recall' name='recall' autocomplete='off')
 
+        table(class="table table-bordered table-striped table-hover")
+          thead
+            tr
+              th(scope='col') # Row
+              th(scope='col') Words
+          tbody
+            - var l = 0
+            while l < amount
+              tr
+                th(scope='row') #{l}
+                td
+                  input(type="input", name=l)
+              - l++
       button.btn.btn-primary(type='submit') Submit

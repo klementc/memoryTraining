@@ -46,7 +46,8 @@ exports.picture_create_post = [
             correct: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+1)), 30,150),
             pos: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+2)), 2*req.session.picnbpics, 530),
             rot: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+3)), req.session.picnbpics, 360),
-            duration: req.body.duration
+            duration: req.body.duration,
+            seed: req.session.picseed
           });
       }
   }
@@ -68,7 +69,8 @@ exports.picture_verify = function(req, res) {
           picList: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed)), req.session.picnbpics, 150),
           correct: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+1)), 30,150),
           pos: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+2)), 2*req.session.picnbpics, 530),
-          rot: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+3)), req.session.picnbpics, 360)
+          rot: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+3)), req.session.picnbpics, 360),
+          seed: req.session.picseed
       });
   }
 }

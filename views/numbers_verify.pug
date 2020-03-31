@@ -3,7 +3,11 @@ extends layout
 block content
   h1= title
   hr
-
+  strong For seed: #{seed}
+  br
+  strong Total numbers: #{size}
+  hr
+  
   if err
     h2 #{err}
   else if recall
@@ -31,10 +35,7 @@ block content
                 | #{n} 
           - l++
   else
-    strong For seed: #{seed}
-    br
-    strong Total numbers: #{size}
-      hr
+
     p Enter the numbers in the following text input, without any separation between digits (put a random character for the ones you don't remember).
 
     form(method='POST' action='')
@@ -50,6 +51,6 @@ block content
               tr
                 th(scope='row') #{l}
                 td
-                  input(type="input", name=l, maxlength=group_by)
+                  input(type="input" name=l maxlength=group_by autocomplete="off")
               - l++
       button.btn.btn-primary(type='submit') Submit

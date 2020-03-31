@@ -47,7 +47,7 @@ block content
               tr
                 th(scope='row') #{parseInt(from)+(parseInt(l)*group_by)}
                 td
-                  input(type="input", name=l, maxlength=group_by)
+                  input(type="input" name=l maxlength=group_by autocomplete="off")
               - l++
 
       button.btn.btn-primary(type='submit') Submit

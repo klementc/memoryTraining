@@ -3,6 +3,10 @@ extends layout
 block content
   h1= title
   hr
+  strong For seed: #{seed}
+  br
+  strong Total words: #{size}
+  hr
   if err
     h2 #{err}
   else if recall
@@ -29,10 +33,6 @@ block content
                 | #{n} 
           - l++
   else
-    strong For seed: #{seed}
-    br
-    strong Total words: #{size}
-      hr
     p Enter the words in the following text input, separating words with a space.
 
     form(method='POST' action='verify')
@@ -48,6 +48,6 @@ block content
               tr
                 th(scope='row') #{l}
                 td
-                  input(type="input", name=l)
+                  input(type="input" name=l autocomplete="off")
               - l++
       button.btn.btn-primary(type='submit') Submit

@@ -10,6 +10,7 @@
   "dependencies": {
     "acorn": "^7.1.1",
     "async": "^3.2.0",
+    "body-parser": "^1.19.0",
     "clean-css": "^4.2.3",
     "compression": "^1.7.4",
     "cookie-parser": "~1.4.4",
@@ -23,6 +24,9 @@
     "https": "^1.0.0",
     "mongoose": "^5.9.6",
     "morgan": "~1.9.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.0.1",
     "pug": "^2.0.4",
     "random-js": "^2.1.0",
     "uuidv4": "^6.0.6"

@@ -4,7 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
+const passport = require('passport');
 const { uuid } = require('uuidv4');
+const passportLocalMongoose = require('passport-local-mongoose')
+var mongoose = require('mongoose');
+
 
 var indexRouter = require('./routes/index');
 var gameRouter = require('./routes/game');
@@ -25,9 +29,34 @@ app.use(session({
     return uuid() // use UUIDs for session IDs
   },
   secret: 'memgames loves cat',
-  resave:true,
-  saveUninitialized: true
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+      secure: false,
+      maxAge: 3600000 //1 hour
+  }
 }))
+
+var mongoDB = process.env.MDB_ADDR // eg 'mongodb://localhost:27017';
+mongoose.connect(mongoDB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+app.use(express.urlencoded({ extended: true })); // express body-parser
+app.use(passport.initialize());
+app.use(passport.session());
+ 
+const User = require('./models/user');
+// USE "createStrategy" INSTEAD OF "authenticate"
+// This uses and configures passport-local behind the scenes
+passport.use(User.createStrategy());
+ 
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use(helmet());
 // view engine setup

@@ -19,14 +19,16 @@ exports.grid_create_post = [
       if(! err.isEmpty()) {
           res.render('grid_form', {
               title:'Start a grid Game',
-              errors: err.array()
+              errors: err.array(), 
+              user:req.user
           })
           return;
       }else {
           res.render('grid_play', {
             width: req.body.width,
             height: req.body.height,
-            duration: req.body.duration
+            duration: req.body.duration, 
+            user:req.user
           });
       }
   }

@@ -1,9 +1,12 @@
 const validator = require('express-validator');
 var async = require('async');
 var crypto = require('crypto');
+const { uuid } = require('uuidv4');
+var user = require('../models/user');
+var Game = require('../models/game');
 
 exports.pi_create_get = function(req, res) {
-  res.render('pi_form', {title: 'Famous numbers memorization'});
+  res.render('pi_form', {title: 'Famous numbers memorization', user:req.user});
 };
 
 exports.pi_create_post = [
@@ -28,13 +31,15 @@ exports.pi_create_post = [
     if(! err.isEmpty()) {
       res.render('pi_form', {
           title:'Start a Pi Game',
-          errors: err.array()
+          errors: err.array(), 
+          user:req.user
       })
       return;
       }if(req.body.task == "recall") {
       var numList = get_decimals(req.body.from, req.body.nbLines*req.body.group_by, getfname(req.body.number), req.body.group_by);
 
       // session data
+      req.session.pigid = uuid();
       req.session.pifrom = req.body.from;
       req.session.piamount = req.body.nbLines;
       req.session.pigroup_by = req.body.group_by;
@@ -49,7 +54,8 @@ exports.pi_create_post = [
         number: req.body.number,
         from: req.session.pifrom,
         group_by: req.session.pigroup_by,
-        amount: req.session.piamount,
+        amount: req.session.piamount, 
+        user:req.user
       });
     } else {
       // start learn task
@@ -65,7 +71,7 @@ exports.pi_create_post = [
         req.session.pisize = req.body.group_by*req.body.nbLines;
 
         //console.log(numList);
-        // render page showing the requested digits of pi 
+        // render page showing the reqed digits of pi 
         res.render('pi_show',{
           title:'Showing decimals of number',
           from: req.body.from,
@@ -74,7 +80,8 @@ exports.pi_create_post = [
           group_by: req.body.group_by,
           group_by: req.session.pigroup_by,
           amount: req.session.piamount,
-          numList: numList
+          numList: numList, 
+          user:req.user
         });
       }
     }
@@ -90,7 +97,8 @@ exports.pi_verify = function(req, res) {
       err="Play a game before verifying";
       res.render('pi_recall',{
         title:'Validate your recall',
-        err:err
+        err:err, 
+        user:req.user
     });
   } else{
     var recall;
@@ -119,7 +127,33 @@ exports.pi_verify = function(req, res) {
         if(ok) lg.push("bg-success");
         else lg.push("bg-danger");
     }
-    console.log("c"+score)
+    
+    // if this is the end and the user is register, add his score to the database
+    if(req.isAuthenticated() && recall){
+      user.findOne({username: req.user.username}).exec(function(err, u){
+          if(! err){
+              Game.findOne({gid: req.session.pigid}).exec(function(err, ga){
+                  if(! err && ! ga){
+                      var g = new Game({
+                          user: u._id,
+                          gid: req.session.pigid,
+                          type: 'PI',
+                          score: score,
+                          maxscore: req.session.piamount*req.session.pigroup_by,
+                          seed: req.session.piseed,
+                          date: Date.now()
+                      });
+                      g.save(function (err, game) {
+                          if (err) return console.error(err);
+                          console.log("success!"+game);
+                          Game.find({user: u._id}).exec(function(err,v){console.log(v)})
+                        });
+                  }
+                })
+          }
+      })
+    }
+
     res.render('pi_recall',{
       title:'Validate your recall',
       score: score,
@@ -130,7 +164,8 @@ exports.pi_verify = function(req, res) {
       correct: correct,
       nList: nList,
       number: req.session.pinumber,
-      lg: lg,
+      lg: lg, 
+      user:req.user
     });
   }
 }

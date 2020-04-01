@@ -25,25 +25,24 @@ block content
   form(method='POST' action='')
     div.form-group
       label(for='amount') Number of lines:
-      input#amount.form-control(type='number', placeholder='10', name='amount', value=(undefined===amount ? '10' : amount.name))
-
+      input#amount.form-control(type='number', placeholder='10', name='amount', min=0 value=(undefined===amount ? '10' : amount.name))
+      br
       label(for='group_by') Digits per line:
       input#group_by.form-control(type='number',
-      placeholder='6', name='group_by', value=(undefined===group_by ? '6' : group_by.name))
-
-      label(for='duration') Duration (minutes):
-      input#duration.form-control(type='number', placeholder='3', name='duration', value=(undefined===duration ? '3' : duration.name))
-
-      label(for='seed') Seed (optional):
-      input#seed.form-control(type='number', step="any", placeholder='', name='seed', value=(undefined===seed ? '' : seed.name))
+      placeholder='6', name='group_by', min=0 value=(undefined===group_by ? '6' : group_by.name))
       br
+      label(for='duration') Duration (minutes):
+      input#duration.form-control(type='number', placeholder='3', min=0 name='duration', value=(undefined===duration ? '3' : duration.name))
+      br
+      label(for='seed') Seed (optional):
+      input#seed.form-control(type='number', step="any", placeholder='', name='seed', min=0 value=(undefined===seed ? '' : seed.name))
       br
       label(for="base") Base:
-      select(class="base" name="base")
+      select#base.form-control(class="base" name="base")
         option(value="decimal") decimal
         option(value="binary") binary
-
-    button.btn.btn-primary(type='submit') Submit
+      br
+      button.btn.btn-primary(type='submit') Submit
 
   if errors 
    ul

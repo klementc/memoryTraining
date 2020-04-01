@@ -20,15 +20,15 @@ block content
   form(method='POST' action='')
     div.form-group
       label(for='nbPics') Number of pictures:
-      input#duration.form-control(type='number', placeholder='20', name='nbPics', value=(undefined===nbPics ? '20' : nbPics.name))
-
+      input#duration.form-control(type='number', placeholder='20', name='nbPics', min=1 value=(undefined===nbPics ? '20' : nbPics.name))
+      br
       label(for='duration') Duration (sec):
-      input#duration.form-control(type='number', step="any", placeholder='30', name='duration', value=(undefined===duration ? '30' : duration.name))
-
+      input#duration.form-control(type='number', step="any", placeholder='30',min=1 name='duration', value=(undefined===duration ? '30' : duration.name))
+      br
       label(for='seed') Seed:
       input#seed.form-control(type='number', step='any', placeholder='', name='seed', value=(undefined===seed ? '' : seed.name))
-
-    button.btn.btn-primary(type='submit') Submit
+      br
+      button.btn.btn-primary(type='submit') Submit
 
   if errors 
    ul

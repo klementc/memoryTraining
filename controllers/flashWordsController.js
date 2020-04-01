@@ -1,6 +1,7 @@
 const validator = require('express-validator');
 var async = require('async');
 var crypto = require('crypto');
+const { uuid } = require('uuidv4');
 
 // rng using seed (not available with math.random)
 const { Random, MersenneTwister19937 } = require("random-js");
@@ -12,7 +13,7 @@ function randU32Sync() {
 
 /** form for creating a word game */
 exports.flash_create_get = function(req, res) {
-  res.render('flash_words_form', {title: 'Flash Word Game'});
+  res.render('flash_words_form', {title: 'Flash Word Game', user:req.user});
 };
 
 
@@ -38,7 +39,8 @@ exports.flash_create_post = [
     if(! err.isEmpty()) {
         res.render('flash_words_form', {
             title:'Start a decimal recall Game',
-            errors: err.array()
+            errors: err.array(), 
+            user:req.user
         })
         return;
     }
@@ -52,16 +54,18 @@ exports.flash_create_post = [
             seed = randU32Sync();
         
         // init session data
-        req.session.seed = seed;
-        req.session.amount = req.body.amount;
-        req.session.language = req.body.language;
+        req.session.fwgid = uuid();
+        req.session.fwseed = seed;
+        req.session.fwamount = req.body.amount;
+        req.session.fwlanguage = req.body.language;
 
         res.render('flash_words_play', {
             title: 'Play Flash Words', 
             duration: req.body.duration,
             seed:seed,
             size:req.body.amount,
-            word_list: get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, 1, req.session.language)
+            word_list: get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, 1, req.session.fwlanguage), 
+            user:req.user
         });
     }
   }
@@ -71,11 +75,12 @@ exports.flash_create_post = [
 exports.flash_verify = function(req, res) {
   var err=""
   
-  if(! req.session.seed || ! req.session.amount) {
+  if(! req.session.fwseed || ! req.session.fwamount) {
       err="Play a game before verifying";
       res.render('flash_words_recall',{
         title:'Validate your recall',
-        err:err
+        err:err, 
+        user:req.user
     });
   } else {      
     var recall;
@@ -83,9 +88,9 @@ exports.flash_verify = function(req, res) {
     var score = 0;
     var lg=[];
 
-    var correct = get_word_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.amount, 1, req.session.language)
+    var correct = get_word_list_from_seed(MersenneTwister19937.seed(req.session.fwseed), req.session.fwamount, 1, req.session.fwlanguage)
 
-    for(var i=0;i<req.session.amount;i++) {
+    for(var i=0;i<req.session.fwamount;i++) {
       var ok = true;
       
         if(undefined!=req.body[i] && (''+req.body[i]).split(" ")!=[]){
@@ -110,11 +115,12 @@ exports.flash_verify = function(req, res) {
         score: score,
         lg: lg,
         nList: nList,
-        correct: get_word_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.amount,1, req.session.language),
-        seed:req.session.seed,
+        correct: get_word_list_from_seed(MersenneTwister19937.seed(req.session.fwseed), req.session.fwamount,1, req.session.fwlanguage),
+        seed:req.session.fwseed,
         group_by: 1,
-        amount: req.session.amount,
-        recall: recall
+        amount: req.session.fwamount,
+        recall: recall, 
+        user:req.user
     });
   }
 }

@@ -4,10 +4,17 @@ block content
 
   block data
 
+  form(action=verifUrl method="POST")
+    button.btn.btn-primary(type='submit' onclick="finish();") Submit
+
   script.
-    setTimeout(function () {
+
+    function finish(){
       clearInterval(i);
       document.getElementById("memZone").innerHTML="<strong>Finished</strong>";
+    }
+    setTimeout(function () {
+      finish()
       var form = $('<form action="#{verifUrl}" method="post"></form>');
       $('body').append(form);
       form.submit();

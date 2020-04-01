@@ -1,6 +1,9 @@
 const validator = require('express-validator');
 var async = require('async');
 var crypto = require('crypto');
+const { uuid } = require('uuidv4');
+var user = require('../models/user');
+var Game = require('../models/game');
 
 // rng using seed (not available with math.random)
 const { Random, MersenneTwister19937 } = require("random-js");
@@ -12,7 +15,7 @@ function randU32Sync() {
 
 /** form for creating a word game */
 exports.word_create_get = function(req, res) {
-  res.render('words_form', {title: 'Start a Word Game'});
+  res.render('words_form', {title: 'Start a Word Game', user:req.user});
 };
 
 
@@ -41,7 +44,8 @@ exports.word_create_post = [
       if(! err.isEmpty()) {
           res.render('numbers_form', {
               title:'Start a Word Game',
-              errors: err.array()
+              errors: err.array(), 
+              user:req.user
           })
           return;
       }else {
@@ -54,24 +58,26 @@ exports.word_create_post = [
                 seed = randU32Sync();
 
             // set session data
-            req.session.amount = req.body.amount;
-            req.session.group_by = req.body.group_by;
-            req.session.seed = seed;
-            req.session.size = req.body.amount*req.body.group_by;
-            req.session.language = req.body.language;
+            req.session.wgid = uuid();
+            req.session.wamount = req.body.amount;
+            req.session.wgroup_by = req.body.group_by;
+            req.session.wseed = seed;
+            req.session.wsize = req.body.amount*req.body.group_by;
+            req.session.wlanguage = req.body.language;
             
             // render game page
             res.render('word_play', {
                 title: 'Play Words', 
-                word_list: get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by, req.session.language),
+                word_list: get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by, req.session.wlanguage),
                 timer: req.body.duration*60,
                 seed:seed,
                 size:req.body.amount*req.body.group_by,
                 row:req.body.group_by,
                 base: req.body.base,
                 verifUrl: "/game/words/verify",
-                amount: req.session.amount,
-                group_by: req.session.group_by
+                amount: req.session.wamount,
+                group_by: req.session.wgroup_by, 
+                user:req.user
             });
       }
   }
@@ -81,11 +87,12 @@ exports.word_create_post = [
 exports.word_verify = function(req, res) {
   var err=""
   
-  if(! req.session.amount || ! req.session.group_by || ! req.session.seed || ! req.session.size) {
+  if(! req.session.wamount || ! req.session.wgroup_by || ! req.session.wseed || ! req.session.wsize) {
       err="Play a game before verifying";
       res.render('words_verify',{
         title:'Validate your recall',
-        err:err
+        err:err, 
+        user:req.user
     });
     } else {
       var recall;
@@ -93,9 +100,9 @@ exports.word_verify = function(req, res) {
       var score = 0;
       var lg=[];
 
-      var correct = get_word_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.amount, req.session.group_by, req.session.language)
+      var correct = get_word_list_from_seed(MersenneTwister19937.seed(req.session.wseed), req.session.wamount, req.session.wgroup_by, req.session.wlanguage)
 
-      for(var i=0;i<req.session.amount;i++) {
+      for(var i=0;i<req.session.wamount;i++) {
         var ok = true;
         
           if(undefined!=req.body[i] && (''+req.body[i]).split(" ")!=[]){
@@ -115,22 +122,49 @@ exports.word_verify = function(req, res) {
           if(ok) lg.push("bg-success");
           else lg.push("bg-danger");
       }
+
+      // if this is the end and the user is register, add his score to the database
+      if(req.isAuthenticated() && recall){
+        user.findOne({username: req.user.username}).exec(function(err, u){
+            if(! err){
+                Game.findOne({gid: req.session.wgid}).exec(function(err, ga){
+                    if(! err && ! ga){
+                        var g = new Game({
+                            user: u._id,
+                            gid: req.session.wgid,
+                            type: 'Words',
+                            score: score,
+                            maxscore: req.session.wamount*req.session.wgroup_by,
+                            seed: req.session.wseed,
+                            date: Date.now()
+                        });
+                        g.save(function (err, game) {
+                            if (err) return console.error(err);
+                            console.log("success!"+game);
+                            Game.find({user: u._id}).exec(function(err,v){console.log(v)})
+                          });
+                    }
+                  })
+            }
+        })
+      }
       
       res.render('words_verify',{
           title:'Validate your recall',
           row:req.session.row,
           base: req.session.base,
-          seed:req.session.seed,
-          size: req.session.size,
-          group_by: req.session.group_by,
-          amount: req.session.amount,
+          seed:req.session.wseed,
+          size: req.session.wsize,
+          group_by: req.session.wgroup_by,
+          amount: req.session.wamount,
           recall: recall,
           lg: lg,
           score: score,
           nList: nList,
           score: score,
-          correct: get_word_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.amount, req.session.group_by, req.session.language),
-          err:err});
+          correct: get_word_list_from_seed(MersenneTwister19937.seed(req.session.wseed), req.session.wamount, req.session.wgroup_by, req.session.wlanguage),
+          err:err, 
+          user:req.user});
   }
 }
 

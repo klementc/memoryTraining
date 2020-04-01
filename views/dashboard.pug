@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  h1 Profile of #{user.username}
+  hr
+  h2 Previous games
+  table(class="table table-striped table-hover table-bordered")
+    thead
+      tr
+        th(scope='col') Date
+        th(scope='col') Type
+        th(score='col') Score
+        th(scope='col') Seed
+    tbody
+      each g in games
+        tr
+          td
+            | #{g.date.toLocaleDateString("en-US")}
+          td 
+            | #{g.type}
+          td 
+            | #{g.score}/#{g.maxscore}
+          td 
+            | #{g.seed} 
+      

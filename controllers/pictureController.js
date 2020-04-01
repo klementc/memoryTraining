@@ -1,5 +1,6 @@
 const validator = require('express-validator');
 var async = require('async');
+const { uuid } = require('uuidv4');
 
 var crypto = require('crypto');
 
@@ -22,7 +23,8 @@ exports.picture_create_post = [
       if(! err.isEmpty()) {
           res.render('picture_form', {
               title:'Start a picture Game',
-              errors: err.array()
+              errors: err.array(), 
+              user:req.user
           })
           return;
       }else {
@@ -35,6 +37,7 @@ exports.picture_create_post = [
               seed = randU32Sync();
 
           //init session data
+          req.session.picgid = uuid();
           req.session.picnbpics = req.body.nbPics;
           req.session.picseed = seed;
           req.session.picduration = req.body.duration;
@@ -47,7 +50,8 @@ exports.picture_create_post = [
             pos: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+2)), 2*req.session.picnbpics, 530),
             rot: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+3)), req.session.picnbpics, 360),
             duration: req.body.duration,
-            seed: req.session.picseed
+            seed: req.session.picseed, 
+            user:req.user
           });
       }
   }
@@ -61,7 +65,8 @@ exports.picture_verify = function(req, res) {
       err="Play a game before verifying";
       res.render('picture_verify',{
           title:'Validate your recall',
-          err:err});
+          err:err, 
+          user:req.user});
   } else {
       res.render('picture_verify',{
           title:'Validate your recall',
@@ -70,7 +75,8 @@ exports.picture_verify = function(req, res) {
           correct: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+1)), 30,150),
           pos: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+2)), 2*req.session.picnbpics, 530),
           rot: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+3)), req.session.picnbpics, 360),
-          seed: req.session.picseed
+          seed: req.session.picseed, 
+          user:req.user
       });
   }
 }

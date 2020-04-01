@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 Register
+  hr
+  if err
+    h2 #{err}
+  form(action="" method="POST")
+    div.form-group
+      label(for='username') Username:
+      input#username.form-control(type="input" name="username" placeholder="username" value=(undefined===username ? '' : username.name))
+      br
+      label(for='password') Password:
+      input#password.form-control(type="password" name="password" placeholder="password" value=(undefined===password ? '' : password.name))      
+      br
+      button.btn.btn-primary(type='submit') Register

@@ -1,6 +1,9 @@
 const validator = require('express-validator');
 var async = require('async');
 var crypto = require('crypto');
+const { uuid } = require('uuidv4');
+var user = require('../models/user');
+var Game = require('../models/game');
 
 // rng using seed (not available with math.random)
 const { Random, MersenneTwister19937 } = require("random-js");
@@ -8,7 +11,7 @@ const { Random, MersenneTwister19937 } = require("random-js");
 
 /** form for creating a number game */
 exports.number_create_get = function(req, res) {
-    res.render('numbers_form', {title: 'Start a Number Game'});
+    res.render('numbers_form', {title: 'Start a Number Game', user:req.user});
 };
 
 // when user submits the form to create a game
@@ -36,7 +39,8 @@ exports.number_create_post = [
         if(! err.isEmpty()) {
             res.render('numbers_form', {
                 title:'Start a Number Game',
-                errors: err.array()
+                errors: err.array(), 
+                user:req.user
             })
             return;
         }else {
@@ -49,10 +53,11 @@ exports.number_create_post = [
                 seed = randU32Sync();
             
             // add data to session
-            req.session.seed = seed;
-            req.session.amount = req.body.amount;
-            req.session.group_by = req.body.group_by;
-            req.session.base = req.body.base;
+            req.session.ngid = uuid();
+            req.session.nseed = seed;
+            req.session.namount = req.body.amount;
+            req.session.ngroup_by = req.body.group_by;
+            req.session.nbase = req.body.base;
             
             res.render('number_play', {
                 title: 'Play Words', 
@@ -64,7 +69,8 @@ exports.number_create_post = [
                 size:req.body.amount*req.body.group_by,
                 row:req.body.group_by,
                 base: req.body.base,
-                verifUrl: "/game/numbers/verify"
+                verifUrl: "/game/numbers/verify", 
+                user:req.user
             });
         }
     }
@@ -74,24 +80,25 @@ exports.number_create_post = [
 exports.number_verify = function(req, res) {
     var err=""
     
-    if(! req.session.seed || ! req.session.amount || ! req.session.group_by || ! req.session.base) {
+    if(! req.session.nseed || ! req.session.namount || ! req.session.ngroup_by || ! req.session.nbase) {
         err="Play a game before verifying";
         res.render('numbers_verify',{
             title:'Validate your recall',
-            err:err});
+            err:err, 
+            user:req.user});
     } else {
         var recall;
         var nList = [];
         var score = 0;
         var lg=[];
 
-        var correct = get_number_list_from_seed(MersenneTwister19937.seed(req.session.seed), req.session.amount, req.session.group_by, req.session.base=="binary");
-        for(var i=0;i<req.session.amount;i++) {
+        var correct = get_number_list_from_seed(MersenneTwister19937.seed(req.session.nseed), req.session.namount, req.session.ngroup_by, req.session.nbase=="binary");
+        for(var i=0;i<req.session.namount;i++) {
             var ok = true;
             if(undefined!=req.body[i] && req.body[i]!=""){
                 nList.push(req.body[i]);
                 recall = true;
-                for(var j=0;j<Math.max(req.body[i].length,req.session.group_by);j++) {
+                for(var j=0;j<Math.max(req.body[i].length,req.session.ngroup_by);j++) {
                     if(req.body[i][j]==correct[i][j])
                         score++;
                     else
@@ -104,20 +111,48 @@ exports.number_verify = function(req, res) {
             if(ok) lg.push("bg-success");
             else lg.push("bg-danger");
         }
+
+        // if this is the end and the user is register, add his score to the database
+        if(req.isAuthenticated() && recall){
+            user.findOne({username: req.user.username}).exec(function(err, u){
+                if(! err){
+                    Game.findOne({gid: req.session.ngid}).exec(function(err, ga){
+                        if(! err && ! ga){
+                            var g = new Game({
+                                user: u._id,
+                                gid: req.session.ngid,
+                                type: 'Number',
+                                score: score,
+                                maxscore: req.session.namount*req.session.ngroup_by,
+                                seed: req.session.nseed,
+                                date: Date.now()
+                            });
+                            g.save(function (err, game) {
+                                if (err) return console.error(err);
+                                console.log("success!"+game);
+                                Game.find({user: u._id}).exec(function(err,v){console.log(v)})
+                              });
+                        }
+                    })
+                }
+            })
+        }
+
         res.render('numbers_verify',{
             title:'Validate your recall',
             lg: lg,
-            row:req.session.amount,
-            amount: req.session.amount,
-            group_by: req.session.group_by,
-            base: req.session.base,
-            seed: req.session.seed,
+            row:req.session.namount,
+            amount: req.session.namount,
+            group_by: req.session.ngroup_by,
+            base: req.session.nbase,
+            seed: req.session.nseed,
             score: score,
-            size: req.session.amount*req.session.group_by,
+            size: req.session.namount*req.session.ngroup_by,
             nList: nList,
             recall: recall,
             correct: correct,
-            err:err});
+            err:err, 
+            user:req.user});
     }
 }
 

@@ -29,31 +29,27 @@ block content
   form(method='POST' action='')
     div.form-group
       label(for='from') From (first digit, default 0):
-      input#from.form-control(type='number', placeholder='0', name='from', value=(undefined===from ? 0 : from.name))
-
+      input#from.form-control(type='number', placeholder='0', min=0 name='from', value=(undefined===from ? 0 : from.name))
+      br
       label(for='nbLines') Number of lines:
-      input#nbLines.form-control(type='number', placeholder='10', name='nbLines', value=(undefined===nbLines ? '10' : nbLines.name))
-
+      input#nbLines.form-control(type='number', placeholder='10', min=1 name='nbLines', value=(undefined===nbLines ? '10' : nbLines.name))
+      br
       label(for='group_by') Digits per line:
       input#group_by.form-control(type='number',
-      placeholder='6', name='group_by', value=(undefined===group_by ? '6' : group_by.name))
-
-      br
+      placeholder='6', min=1 name='group_by', value=(undefined===group_by ? '6' : group_by.name))
       br
       label(for='number') Number:
-      select(class="number" name="number")
+      select#number.form-control(class="number" name="number")
         option(value="pi") Pi
         option(value="phi") Golden ratio
         option(value="sq2") Square root of 2
-
-      br
       br
       label(for="task") Task:
-      select(class="task" name="task")
+      select#task.form-control(class="task" name="task")
         option(value="learn") learn
         option(value="recall") recall
-
-    button.btn.btn-primary(type='submit') Submit
+      br
+      button.btn.btn-primary(type='submit') Submit
 
   if errors 
    ul

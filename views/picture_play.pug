@@ -10,7 +10,8 @@ block content
   hr
   div(id="drawing")
 
-
+  form(action="/game/picture/verify" method="POST")
+    button.btn.btn-primary(type='submit' onclick="finish();") Submit
   script. 
     var pics = "#{picList}".split(",");
     var pos = "#{pos}".split(',');
@@ -41,12 +42,15 @@ block content
       $('body').append(form);
       form.submit();
     }, (#{duration}+1)*1000);
-
+    function finish() {
+      clearInterval(i)
+      document.getElementById("time").innerHTML = "<h2>Recall!</h2>";
+      document.getElementById("drawing").innerHTML = "";
+    }
     var t = 0;
     var i = setInterval(function() {
       if((#{duration}+1)-t == 1){
-        clearInterval(i)
-        document.getElementById("time").innerHTML = "<h2>Recall!</h2>";
+        finish();
         return;
       }
       t+=1;

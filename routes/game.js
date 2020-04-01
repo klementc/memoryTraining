@@ -3,7 +3,7 @@ var router = express.Router();
 
 // index page for games
 router.get('/', function(req, res, next) {
-    res.render('index', {title: 'Memgames'});
+    res.render('index', {title: 'Memgames', user:req.user});
 });
 
 module.exports = router;

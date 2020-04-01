@@ -23,25 +23,24 @@ block content
   form(method='POST' action='')
     div.form-group
       label(for='amount') Number of lines:
-      input#amount.form-control(type='number', placeholder='10', name='amount', value=(undefined===amount ? '10' : amount.name))
-
+      input#amount.form-control(type='number', placeholder='10', min=1 name='amount', value=(undefined===amount ? '10' : amount.name))
+      br
       label(for='group_by') Words per line:
       input#group_by.form-control(type='number',
-      placeholder='3', name='group_by', value=(undefined===group_by ? '3' : group_by.name))
-
+      placeholder='3', min=1 name='group_by', value=(undefined===group_by ? '3' : group_by.name))
+      br
       label(for='duration') Duration (minutes):
-      input#duration.form-control(type='number', placeholder='3', name='duration', value=(undefined===duration ? '3' : duration.name))
-
+      input#duration.form-control(type='number', placeholder='3', min=0 name='duration', value=(undefined===duration ? '3' : duration.name))
+      br
       label(for='seed') Seed (optional):
       input#seed.form-control(type='number', step="any", placeholder='', name='seed', value=(undefined===seed ? '' : seed.name))
       br
-      br
       label(for="language") Language:
-      select(class="language" name="language")
+      select#language.form-control(class="language" name="language")
         option(value="en-us") English
         option(value="fr") Français
-
-    button.btn.btn-primary(type='submit') Submit
+      br
+      button.btn.btn-primary(type='submit') Submit
 
   if errors 
    ul

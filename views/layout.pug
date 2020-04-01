@@ -18,6 +18,16 @@ html(lang='en')
               li(class='list-group-item')
                 a(href='/')
                   img(class='img-fluid img-thumbnail' src='/images/logo.png' alt='home')
+              if user
+                li(class='list-group-item')
+                  a(href='/dashboard') #{user.username} [profile]
+                li(class='list-group-item')
+                  a(href='/logout') Logout
+              else
+                li(class='list-group-item')
+                  a(href='/login') Login
+                li(class='list-group-item')
+                  a(href='/register') Register
               hr
               li(class='list-group-item list-group-item-info') 
                 strong Challenges:

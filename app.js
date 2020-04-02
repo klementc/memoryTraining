@@ -8,7 +8,7 @@ const passport = require('passport');
 const { uuid } = require('uuidv4');
 const passportLocalMongoose = require('passport-local-mongoose')
 var mongoose = require('mongoose');
-
+mongoose.set('useCreateIndex', true);
 
 var indexRouter = require('./routes/index');
 var gameRouter = require('./routes/game');

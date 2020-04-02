@@ -1,6 +1,8 @@
 const validator = require('express-validator');
 var async = require('async');
 var crypto = require('crypto');
+var user = require('../models/user');
+var Game = require('../models/game');
 const { uuid } = require('uuidv4');
 
 // rng using seed (not available with math.random)
@@ -109,6 +111,32 @@ exports.flash_verify = function(req, res) {
         }
         if(ok) lg.push("bg-success");
         else lg.push("bg-danger");
+    }
+
+    // if this is the end and the user is register, add his score to the database
+    if(req.isAuthenticated() && recall){
+      user.findOne({username: req.user.username}).exec(function(err, u){
+          if(! err){
+              Game.findOne({gid: req.session.fwgid}).exec(function(err, ga){
+                  if(! err && ! ga){
+                      var g = new Game({
+                          user: u._id,
+                          gid: req.session.fwgid,
+                          type: "Flashwords",
+                          score: score,
+                          maxscore: req.session.fwamount,
+                          seed: req.session.fwseed,
+                          date: Date.now()
+                      });
+                      g.save(function (err, game) {
+                          if (err) return console.error(err);
+                          console.log("success!"+game);
+                          Game.find({user: u._id}).exec(function(err,v){console.log(v)})
+                        });
+                  }
+                })
+          }
+      })
     }
 
     res.render('flash_words_recall', {

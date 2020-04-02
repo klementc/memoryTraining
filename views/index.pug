@@ -25,3 +25,29 @@ block content
     li
       | (More to come)
       
+  if err
+    strong Failed to retrieve data from Database
+  else
+    hr
+    h1 Recent Games
+    table(class="table table-striped table-bordered w-auto")
+      thead
+        tr()
+          th(scope='col') Player
+          th(scope='col') Date
+          th(scope='col') Type
+          th(score='col') Score
+          th(scope='col') Seed
+      tbody
+        each g in lastGames
+          tr
+            td
+              | #{g.user.username}
+            td
+              | #{g.date.toLocaleString()}
+            td 
+              | #{g.type}
+            td 
+              | #{g.score}/#{g.maxscore}
+            td 
+              | #{g.seed} 

@@ -1,8 +1,11 @@
 var express = require('express');
 const passport = require('passport');
 const User = require('../models/user');
+const Game = require('../models/game');
 var auth = require('../utils/auth');
 var dash = require('../controllers/dashboardController');
+var async = require('async');
+
 var router = express.Router();
 
 /* GET home page. */
@@ -10,6 +13,52 @@ router.get('/', function(req, res, next) {
   console.log(req.sessionID);
   res.redirect('/game/');
 });
+
+router.get('/statistics', async (req, res) => {
+  var queries = [];
+  queries.push(function(cb){
+    Game.aggregate([
+      { $group: {_id:"$type", count: { $sum: 1}}}
+    ]).exec(function(err, r){
+      if(err) throw cb(err);
+      cb(null, r);
+    });
+  });
+  queries.push(function(cb) {
+    User.countDocuments().exec(function(err, r){
+      if(err) throw cb(err);
+      cb(null, r);
+    })
+  })
+  queries.push(function(cb){
+    Game.aggregate([
+      { $group: {_id:"$type", count: { $sum: "$score"}}}
+    ]).exec(function(err, r){
+      if(err) throw cb(err);
+      cb(null, r);
+    })
+  })
+  queries.push(function(cb){
+    Game.aggregate([
+      { $group: {_id:"$type", user: {$first: "$user"}, count: { $max: "$score"}}},
+    ]).exec(function(err, r){
+      if(err) throw cb(err);
+      cb(null, r);
+    })
+  })
+  async.parallel(queries, function(err, docs) {
+    // if any query fails
+    if (err) {
+        res.render('statistics', {err:err});
+    }
+    var nbGames = docs[0]; // result of queries[0]
+    var nbUsers = docs[1];
+    var nbR = docs[2];
+    console.log(docs[3]);
+    res.render('statistics', {nbg: nbGames, nbu: nbUsers, nbr: nbR, user: req.user, bs:docs[3]});
+  })
+});
+
 
 router.get('/about', function(req, res, next) {
   res.render('about',{user:req.user}); 

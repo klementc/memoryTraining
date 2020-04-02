@@ -4,7 +4,7 @@ block content
   h1 Profile of #{user.username}
   hr
   h2 Previous games
-  table(class="table table-striped table-hover table-bordered")
+  table(class="table table-striped table-bordered")
     thead
       tr
         th(scope='col') Date
@@ -22,4 +22,32 @@ block content
             | #{g.score}/#{g.maxscore}
           td 
             | #{g.seed} 
-      
+  hr
+  h2 Player Stats
+  h3 Total Games played
+  table(class="table table-striped table-bordered w-auto")
+    thead
+      tr()
+        th(scope='col') Game Type
+        th(scope='col') # Games Played
+    tbody
+      each g in nbg
+        tr
+          td
+            | #{g['_id']}
+          td
+            | #{g['count']}
+
+  h3 Game scores
+  table(class="table table-striped table-bordered w-auto")
+    thead
+      tr()
+        th(scope='col') Game Type
+        th(scope='col') # Elements Remembers
+    tbody
+      each g in sc
+        tr
+          td
+            | #{g['_id']}
+          td
+            | #{g['count']}

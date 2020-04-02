@@ -137,7 +137,7 @@ exports.pi_verify = function(req, res) {
                       var g = new Game({
                           user: u._id,
                           gid: req.session.pigid,
-                          type: 'PI',
+                          type: req.session.pinumber,
                           score: score,
                           maxscore: req.session.piamount*req.session.pigroup_by,
                           seed: req.session.piseed,

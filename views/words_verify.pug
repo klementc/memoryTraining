@@ -50,4 +50,5 @@ block content
                 td
                   input(type="input" name=l autocomplete="off")
               - l++
-      button.btn.btn-primary(type='submit') Submit
+      if ! recall
+        button.btn.btn-primary(type='submit') Submit

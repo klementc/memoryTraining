@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  h1 Play a Card Game
+
+  button(type="button" class="float-right btn btn-info btn-lg" data-toggle="modal" data-target="#myModal") Rules
+  div(id="myModal" class="modal fade" role="dialog")
+    div(class="modal-dialog")
+      div(class="modal-content")
+        div(class="modal-header")
+          button(type="button" class="close" data-dismiss="modal") &times;
+          h4(class="modal-title") Rules
+        div(class="mobal-body")
+          | TODO
+          br
+          strong sidenote: 
+          | the seed is an integer used for data generation. If you put the same seed for several games, you will have the same words (this can be used to replay, or play the same game as a friend).
+  hr
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='duration') Duration (minutes):
+      input#duration.form-control(type='number', placeholder='3', min=0 name='duration', value=(undefined===duration ? '3' : duration.name))
+      br
+      label(for='group_by') Cards per line:
+      input#group_by.form-control(type='number',
+      placeholder='6', name='group_by', min=0 value=(undefined===group_by ? '6' : group_by.name))
+      br
+      label(for='seed') Seed (optional):
+      input#seed.form-control(type='number', step="any", placeholder='', name='seed', value=(undefined===seed ? '' : seed.name))
+      br
+      button.btn.btn-primary(type='submit') Submit
+
+  if errors 
+   ul
+    for error in errors
+     li!= error.msg

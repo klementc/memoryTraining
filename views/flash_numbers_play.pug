@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  h1 Flash numbers
+  strong Seed: #{seed}
+  hr
+  p(class="text-center")
+    em(id="word") Ready
+
+  hr
+  script.
+    var numbers = "#{number_list}".split(",");
+
+    var t = 0;
+    var i = setInterval(function() {
+      var element = document.getElementById("word");
+      if(t%2)
+        element.classList = "bg-primary"
+      else
+        element.classList = "bg-secondary"
+      document.getElementById('word').innerHTML = numbers[t];
+      if(t == #{size}){
+        clearInterval(i)
+      }
+      t+=1;
+    }, #{duration}*1000);
+    
+    setTimeout(function () {
+      clearInterval(i);
+      document.getElementById('word').innerHTML="<strong>Finished</strong>";
+      var form = $('<form action="/game/flash_numbers/verify" method="post"></form>');
+      $('body').append(form);
+      form.submit();
+    }, (numbers.length+1)*#{duration}*1000);

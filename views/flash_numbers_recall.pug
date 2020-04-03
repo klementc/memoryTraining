@@ -1,0 +1,52 @@
+extends layout
+
+block content
+  h1 Flash Words recall
+  hr
+  strong For seed: #{seed}
+  br
+  strong Total words: #{amount}
+  hr
+  if err
+    h2 #{err}
+  else if recall
+    h2(id='score') Your score: #{score} / #{amount}
+    table(class="table table-bordered")
+      thead
+        tr
+          th(scope='col') # Row
+          th(scope='col') Recall
+          th(scope='col') Correct
+      tbody
+        - var l = 0
+        
+        while l < amount
+          - var cl = (''+nList[l]).split(" ")
+          tr(class=lg[l])
+            th(scope='row') #{l*group_by}
+            td
+              each n in cl
+                | #{n} 
+            td
+              each n in correct[l]
+                | #{n} 
+          - l++
+  else
+    p Enter the words in the following text input, separating numbers with a space.
+
+    form(method='POST' action='')
+      div.form-group
+        table(class="table table-bordered table-striped table-hover")
+          thead
+            tr
+              th(scope='col') # Row
+              th(scope='col') Numbers
+          tbody
+            - var l = 0
+            while l < amount
+              tr
+                th(scope='row') #{l}
+                td
+                  input(type="input" name=l autocomplete="off")
+              - l++
+      button.btn.btn-primary(type='submit') Submit

@@ -2,7 +2,8 @@ extends layout
 
 block content
   h1 Profile of #{user.username}
-  h2 Level #{level} with #{xp.toFixed(0)} xp! [#{rank}]
+  h2 Level #{level} with #{xp.toFixed(0)} xp! [rank: #{rank}]
+  h3 Reach #{nextlvl}xp to reach the next level!
   hr
   h2 Your last 5 games
   table(class="table table-striped table-bordered")

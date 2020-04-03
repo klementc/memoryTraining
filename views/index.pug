@@ -44,7 +44,7 @@ block content
             td
               | #{g.user.username}
             td
-              | #{g.date.toLocaleString()}
+              | #{g.date.toLocaleDateString("en-US")}
             td 
               | #{g.type}
               if(g.type)

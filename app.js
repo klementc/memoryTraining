@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 const { uuid } = require('uuidv4');
 const passportLocalMongoose = require('passport-local-mongoose')
@@ -26,7 +27,18 @@ var helmet = require('helmet');
 
 var app = express();
 
+
+var mongoDB = process.env.MDB_ADDR // eg 'mongodb://localhost:27017';
+mongoose.connect(mongoDB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+
 app.use(session({
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
   genid: function(req) {
     return uuid() // use UUIDs for session IDs
   },
@@ -38,14 +50,6 @@ app.use(session({
       maxAge: 3600000 //1 hour
   }
 }))
-
-var mongoDB = process.env.MDB_ADDR // eg 'mongodb://localhost:27017';
-mongoose.connect(mongoDB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(express.urlencoded({ extended: true })); // express body-parser
 app.use(passport.initialize());

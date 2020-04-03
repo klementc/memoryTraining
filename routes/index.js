@@ -48,7 +48,6 @@ router.get('/statistics', async (req, res) => {
     }
     var nbGames = docs[0]; // result of queries[0]
     var nbUsers = docs[1];
-    console.log(docs[3]);
     res.render('statistics', {nbg: nbGames, nbu: nbUsers, user: req.user, bs:docs[2]});
   })
 });

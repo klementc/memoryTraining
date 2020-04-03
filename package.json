@@ -14,6 +14,7 @@
     "cards": "^1.0.1",
     "clean-css": "^4.2.3",
     "compression": "^1.7.4",
+    "connect-mongo": "^3.2.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",

@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  application:
+    image: klementc/memorytraining:latest
+    ports:
+      - "80:3000"
+    environment:
+      - MDB_ADDR=mongodb://mongo:27017
+    links:
+      - mongo
+  mongo:
+      image: mongo:latest
+      ports:
+        - "27018:27017"
+      volumes:
+        - ./data:/data/db
+networks:
+  default:
+    external:
+      name: mybridge 
+

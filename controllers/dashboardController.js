@@ -17,6 +17,10 @@ function calculateLevel(xp) {
   return Math.floor((25 + Math.sqrt(625 + 100 * xp)) / 50)
 }
 
+function xpForLevel(level) {
+  return 25 * level * level - 25 * level
+}
+
 function getNameFromLevel(level) {
   if(levelNames.length < level){
     return 'Too many levels'
@@ -82,7 +86,8 @@ exports.get_dashboard = function(req, res){
         xp+=0.1*docs[1][i].count
       }
 
-      res.render('dashboard', {user:req.user, nbg:docs[0], sc: docs[1], games:docs[2], px: plotx, py: ploty, level:calculateLevel(xp), xp:xp, rank:getNameFromLevel(calculateLevel(xp))})
+      res.render('dashboard', {user:req.user, nbg:docs[0], sc: docs[1], games:docs[2], px: plotx, py: ploty, level:calculateLevel(xp), xp:xp, rank:getNameFromLevel(calculateLevel(xp)),
+      nextlvl: xpForLevel(1+calculateLevel(xp))})
     })
 
   }else{

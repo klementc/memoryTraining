@@ -47,6 +47,11 @@ block content
               | #{g.date.toLocaleString()}
             td 
               | #{g.type}
+              if(g.type)
+                if(g.type=="Words" || g.type=="Flashwords")
+                  |  (#{g.add})
+                else if(g.type=="Pi" || g.type=="Phi" || g.type=="Sq2")
+                  |  (from #{g.add})
             td 
               | #{g.score}/#{g.maxscore}
             td 

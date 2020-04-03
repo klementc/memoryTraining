@@ -11,6 +11,7 @@ var GameSchema = new Schema(
        maxscore: {type:Number, required: true},
        date: {type: Date, required: true},
        seed: {type: Number},
+       add: {type: String}, // for words and pi
     }
 )
 

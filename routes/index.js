@@ -18,7 +18,10 @@ router.get('/statistics', async (req, res) => {
   var queries = [];
   queries.push(function(cb){
     Game.aggregate([
-      { $group: {_id:"$type", count: { $sum: 1}}}
+      { $group: {_id:"$type", 
+              count: { $sum: 1},
+              count2: { $sum: "$score"},
+              }}
     ]).exec(function(err, r){
       if(err) throw cb(err);
       cb(null, r);
@@ -26,14 +29,6 @@ router.get('/statistics', async (req, res) => {
   });
   queries.push(function(cb) {
     User.countDocuments().exec(function(err, r){
-      if(err) throw cb(err);
-      cb(null, r);
-    })
-  })
-  queries.push(function(cb){
-    Game.aggregate([
-      { $group: {_id:"$type", count: { $sum: "$score"}}}
-    ]).exec(function(err, r){
       if(err) throw cb(err);
       cb(null, r);
     })
@@ -53,9 +48,8 @@ router.get('/statistics', async (req, res) => {
     }
     var nbGames = docs[0]; // result of queries[0]
     var nbUsers = docs[1];
-    var nbR = docs[2];
     console.log(docs[3]);
-    res.render('statistics', {nbg: nbGames, nbu: nbUsers, nbr: nbR, user: req.user, bs:docs[3]});
+    res.render('statistics', {nbg: nbGames, nbu: nbUsers, user: req.user, bs:docs[2]});
   })
 });
 

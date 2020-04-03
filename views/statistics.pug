@@ -9,27 +9,29 @@ block content
   if err
     h2 Error fetching data
   else
-    h3 Total Users: #{nbu}
+    h3 Users Registered: #{nbu}
     hr
-    h3 Total Games played
     table(class="table table-striped table-bordered w-auto")
       thead
         tr()
-          th(scope='col') Game Type
+          th(scope='col') Game
           th(scope='col') # Games Played
+          th(scope='col') # Elements remembered
       tbody
         each g in nbg
           tr
             td
               | #{g['_id']}
             td
-              | #{g['count']}
+              | #{g['count']} 
+            td
+              | #{g['count2']}
     hr
     h3 Best scores
     table(class="table table-striped table-bordered w-auto")
       thead
         tr()
-          th(scope='col') Game Type
+          th(scope='col') Game
           th(scope='col') # Max score
       tbody
         each g in bs
@@ -39,16 +41,3 @@ block content
             td
               | #{g['count']}
     hr
-    h3 Game Total
-    table(class="table table-striped table-bordered w-auto")
-      thead
-        tr()
-          th(scope='col') Game Type
-          th(scope='col') # Elements Remembers
-      tbody
-        each g in nbr
-          tr
-            td
-              | #{g['_id']}
-            td
-              | #{g['count']}

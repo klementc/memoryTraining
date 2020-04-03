@@ -70,7 +70,6 @@ exports.pi_create_post = [
         req.session.pinumber = req.body.number;
         req.session.pisize = req.body.group_by*req.body.nbLines;
 
-        //console.log(numList);
         // render page showing the reqed digits of pi 
         res.render('pi_show',{
           title:'Showing decimals of number',
@@ -92,7 +91,6 @@ exports.pi_create_post = [
 /** Perform correction after user's recall validation */
 exports.pi_verify = function(req, res) {
   var err=""
-  //console.log(req.session);
   if(! req.session.pisize || ! req.session.pinumber) {
       err="Play a game before verifying";
       res.render('pi_recall',{
@@ -106,10 +104,8 @@ exports.pi_verify = function(req, res) {
     var score = 0;
     var lg=[];
     var correct = get_decimals(req.session.pifrom, req.session.piamount*req.session.pigroup_by, getfname(req.session.pinumber),req.session.pigroup_by);
-    console.log("correct:"+score);
 
     for(var i=0;i<req.session.piamount;i++) {
-      console.log(req.body[i]);
         var ok = true;
         if(undefined!=req.body[i] && req.body[i]!=""){
             nList.push(req.body[i]);
@@ -141,7 +137,8 @@ exports.pi_verify = function(req, res) {
                           score: score,
                           maxscore: req.session.piamount*req.session.pigroup_by,
                           seed: req.session.piseed,
-                          date: Date.now()
+                          date: Date.now(),
+                          add: req.session.pifrom
                       });
                       g.save(function (err, game) {
                           if (err) return console.error(err);
@@ -181,10 +178,10 @@ function get_decimals(start,len, file, gb) {
 }
 
 function getfname(num) {
-  var fname;
-  if(num == "pi") fname='ressources/PI50K_DP.TXT';
-  else if(num == "phi") fname='ressources/phi_50k.txt'; 
-  else fname='ressources/sq2.txt'; 
+  var fname='ressources/PI50K_DP.TXT';
+
+  if(num == "Phi") fname='ressources/phi_50k.txt'; 
+  else if(num=="Sq2")fname='ressources/sq2.txt'; 
 
   return fname;
 }

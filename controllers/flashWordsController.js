@@ -126,7 +126,8 @@ exports.flash_verify = function(req, res) {
                           score: score,
                           maxscore: req.session.fwamount,
                           seed: req.session.fwseed,
-                          date: Date.now()
+                          date: Date.now(),
+                          add: req.session.fwlanguage
                       });
                       g.save(function (err, game) {
                           if (err) return console.error(err);

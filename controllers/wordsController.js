@@ -136,7 +136,8 @@ exports.word_verify = function(req, res) {
                             score: score,
                             maxscore: req.session.wamount*req.session.wgroup_by,
                             seed: req.session.wseed,
-                            date: Date.now()
+                            date: Date.now(),
+                            add: req.session.wlanguage
                         });
                         g.save(function (err, game) {
                             if (err) return console.error(err);

@@ -3,7 +3,7 @@ extends layout
 block content
   h1 Profile of #{user.username}
   hr
-  h2 Previous games
+  h2 Your last 5 games
   table(class="table table-striped table-bordered")
     thead
       tr
@@ -24,6 +24,8 @@ block content
             | #{g.seed} 
   hr
   h2 Player Stats
+  h3 Best Scores
+  div(id="tester" class="center-block" style="width:600px;height:400px;")
   h3 Total Games played
   table(class="table table-striped table-bordered w-auto")
     thead
@@ -38,12 +40,12 @@ block content
           td
             | #{g['count']}
 
-  h3 Game scores
+  h3 Overall Games
   table(class="table table-striped table-bordered w-auto")
     thead
       tr()
         th(scope='col') Game Type
-        th(scope='col') # Elements Remembers
+        th(scope='col') # Elements Remembered
     tbody
       each g in sc
         tr
@@ -51,3 +53,13 @@ block content
             | #{g['_id']}
           td
             | #{g['count']}
+
+  script.
+    //console.log("#{px}".spli+"")
+    var data = [
+    {
+      x: "#{px}".split(","),
+      y: "#{py}".split(","),
+      type: 'bar'
+    }];
+    Plotly.newPlot('tester', data);

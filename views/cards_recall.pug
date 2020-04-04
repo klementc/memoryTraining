@@ -1,25 +1,29 @@
 extends layout
 
 block content
-  h1 Play a Card Game
+  h1 Recall!
   strong Seed: #{seed}
   br
   strong Score: #{score} / 52
   hr
+  p Write the position of each card in the deck (first card = 0, second = 1 ...)
+
+  form
   form(method='POST' action='')  
     div.form-group
-      table(class="table table-striped table-hovertable-bordered table-bordered")
-        thead
-        tbody
-          - var i = 0
-          each c in cards
-            if i % group_by == 0
-              tr
-            td
-              img(src="/images/cards/"+c width="100" height="150") 
-              if nList && recall
-                strong #{nList[i]}
-              else
-                input(name=c type="input" autocomplete='off')
-            - i++
+      thead
+      tbody
+        - var i = 0
+        each c in cards
+          if i % 6 == 0
+            div(class="form-group-row")
+          div(class="col-md-2")
+            img(src="/images/cards/"+c width="100" height="150" class="center-block") 
+            if nList && recall
+              strong(class="text-center") #{nList[i]}
+            else
+              input(name=c type="input" class="form-control" autocomplete='off')
+          - i++
+    br
+    if !(recall && nList)
       button.btn.btn-primary(type='submit') Submit

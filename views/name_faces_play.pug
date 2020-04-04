@@ -1,0 +1,23 @@
+extends challenge
+
+block data
+  h1 Play a Name and Faces Game
+  hr
+  p(class="text-center")
+    em(id="time") #{timer} 
+    | seconds left!
+  strong Seed: #{seed}
+  hr
+  div(id="memZone" class="table-responsive")
+    table(class="table table-striped table-hovertable-bordered table-bordered")
+      thead
+      tbody
+        - var i = 0
+        each c,d in faces
+          if i % 3 == 0
+            tr
+          td
+            img(src="/names/pics/f-"+c+".jpg" width="100" height="150") 
+            br
+            strong #{names[d]}
+          - i++

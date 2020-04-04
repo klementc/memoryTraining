@@ -20,3 +20,10 @@ for i in *.svg; do
   mv -f -i -- "$i" "$new"
   let a=a+1
 done
+
+
+# get name list
+cd ../../..
+mkdir -p public/names/txt public/names/pics 
+cd public/names/txt
+wget https://raw.githubusercontent.com/smashew/NameDatabases/master/NamesDatabases/first%20names/us.txt

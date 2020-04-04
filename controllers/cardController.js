@@ -14,7 +14,7 @@ function randU32Sync() {
 }
 
 exports.card_create_get = function(req, res) {
-  res.render('card_form');
+  res.render('card_form', {user:req.user});
 }
 
 exports.card_create_post = [
@@ -54,7 +54,7 @@ exports.card_create_post = [
       req.session.cagroup_by = req.body.group_by;
       req.session.caduration = (Number(req.body.durationm)*60)+Number(req.body.durations);;
 
-      res.render('cards_play', {cards: c, group_by: req.session.cagroup_by, timer: (Number(req.body.durationm)*60)+Number(req.body.durations),verifUrl: "/game/card/verify"});
+      res.render('cards_play', {user:req.user, cards: c, group_by: req.session.cagroup_by, timer: (Number(req.body.durationm)*60)+Number(req.body.durations),verifUrl: "/game/card/verify"});
     }
   }
 ];
@@ -131,7 +131,7 @@ exports.card_verify = function(req, res) {
         })
       }
 
-      res.render('cards_recall',{score:score, cards:c,group_by: req.session.cagroup_by, seed:req.session.caseed, recall: recall, nList:nList})
+      res.render('cards_recall',{user:req.user, score:score, cards:c,group_by: req.session.cagroup_by, seed:req.session.caseed, recall: recall, nList:nList})
     }
 }
 

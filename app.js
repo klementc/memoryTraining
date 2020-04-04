@@ -21,6 +21,7 @@ var gridRouter  = require('./routes/grid');
 var pictureRouter = require('./routes/picture');
 var cardRouter = require('./routes/cards');
 var flashNumbersRouter = require('./routes/flashNumbers');
+var nameFacesRouter = require('./routes/nameFaces');
 
 var compression = require('compression');
 var helmet = require('helmet');
@@ -88,6 +89,7 @@ app.use('/game/grid/', gridRouter);
 app.use('/game/picture/', pictureRouter);
 app.use('/game/card/', cardRouter);
 app.use('/game/flash_numbers/', flashNumbersRouter);
+app.use('/game/name_faces/', nameFacesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

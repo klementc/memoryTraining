@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1 Recall!
+  strong Seed: #{seed}
+  br
+  strong Score: #{score} / #{amount}
+  hr
+
+  form
+  form(method='POST' action='')  
+    div.form-group
+      thead
+      tbody
+        - var i = 0
+        each c in faces
+          if i % 3 == 0
+            div(class="form-group-row")
+          div(class="col-md-2")
+            img(src="/names/pics/f-"+c+".jpg" width="100" height="150" class="center-block") 
+            if nList && recall
+              strong(class="text-center") #{names[i]}
+            else
+              input(name=c type="input" class="form-control" autocomplete='off')
+          - i++
+    br
+    if !(recall && nList)
+      button.btn.btn-primary(type='submit') Submit

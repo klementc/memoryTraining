@@ -15,15 +15,16 @@ block content
     }
     setTimeout(function () {
       finish()
+      document.getElementById('time').innerHTML = "0 "
       var form = $('<form action="#{verifUrl}" method="post"></form>');
       $('body').append(form);
       form.submit();
-    }, #{timer}*1000)
+    }, Number(#{timer})*1000)
     var t = 0;
     var i = setInterval(function() {
-      if(#{timer}+1-t == 0){
+      if(Number(#{timer})+1-t == 0){
         clearInterval(i)
       }
-      t+=1;
-      document.getElementById('time').innerHTML = #{timer}-t+" ";
-    }, 1000);
+      t+=.1;
+      document.getElementById('time').innerHTML = (Number(#{timer})-Number(t)).toFixed(1)+" ";
+    }, 100);

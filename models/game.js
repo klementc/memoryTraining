@@ -10,8 +10,9 @@ var GameSchema = new Schema(
        score: {type:Number, required: true},
        maxscore: {type:Number, required: true},
        date: {type: Date, required: true},
-       seed: {type: Number},
-       add: {type: String}, // for words and pi
+       duration: {type: Number, required: false},
+       seed: {type: Number, required: false},
+       add: {type: String, required: false}, // for words and pi
     }
 )
 

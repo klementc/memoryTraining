@@ -8,6 +8,11 @@ var Game = require('../models/game');
 
 rand.useArc4(true)
 
+// create a random 32bit int (https://stackoverflow.com/questions/28061016/generate-random-32-bit-number-in-node)
+function randU32Sync() {
+  return crypto.randomBytes(4).readUInt32BE(0, true);
+}
+
 exports.card_create_get = function(req, res) {
   res.render('card_form');
 }
@@ -15,8 +20,11 @@ exports.card_create_get = function(req, res) {
 exports.card_create_post = [
   // parse parameters
 
-  validator.body('duration', 'Duration must be a number between 1 and 30').isInt({min:0, max:30}),
-  validator.sanitizeBody('duration').escape(),
+  validator.body('durationm', 'Duration must be a number between 1 and 30').isInt({min:0, max:30}),
+  validator.sanitizeBody('durationm').escape(),
+
+  validator.body('durations', 'Duration must be a number between 1 and 30').isInt({min:0, max:30}),
+  validator.sanitizeBody('durations').escape(),
 
   // create the game or show errors
   (req, res, next) => {
@@ -31,7 +39,7 @@ exports.card_create_post = [
       });
       return;
     }else{
-      seed = req.body.seed ? (rand.seedArc4(req.body.seed)) :  rand.seedArc4(Math.random().toString());
+      seed = req.body.seed ? (rand.seedArc4(req.body.seed)) :  rand.seedArc4(randU32Sync().toString());
       var deck = new decks.StandardDeck();
       deck.shuffleAll();
       var cards = deck.draw(deck.remainingLength);
@@ -44,8 +52,9 @@ exports.card_create_post = [
       req.session.cagid = uuid();
       req.session.caseed = seed;
       req.session.cagroup_by = req.body.group_by;
+      req.session.caduration = (Number(req.body.durationm)*60)+Number(req.body.durations);;
 
-      res.render('cards_play', {cards: c, group_by: req.session.cagroup_by, timer: req.body.duration*60,verifUrl: "/game/card/verify"});
+      res.render('cards_play', {cards: c, group_by: req.session.cagroup_by, timer: (Number(req.body.durationm)*60)+Number(req.body.durations),verifUrl: "/game/card/verify"});
     }
   }
 ];
@@ -108,7 +117,8 @@ exports.card_verify = function(req, res) {
                             score: score,
                             maxscore: 52,
                             seed: req.session.caseed,
-                            date: Date.now()
+                            date: Date.now(),
+                            duration: req.session.caduration
                         });
                         g.save(function (err, game) {
                             if (err) return console.error(err);

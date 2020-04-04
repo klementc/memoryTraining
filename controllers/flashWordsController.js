@@ -60,6 +60,7 @@ exports.flash_create_post = [
         req.session.fwseed = seed;
         req.session.fwamount = req.body.amount;
         req.session.fwlanguage = req.body.language;
+        req.session.fwduration = req.body.duration;
 
         res.render('flash_words_play', {
             title: 'Play Flash Words', 
@@ -127,7 +128,8 @@ exports.flash_verify = function(req, res) {
                           maxscore: req.session.fwamount,
                           seed: req.session.fwseed,
                           date: Date.now(),
-                          add: req.session.fwlanguage
+                          add: req.session.fwlanguage,
+                          duration: req.session.fwduration
                       });
                       g.save(function (err, game) {
                           if (err) return console.error(err);

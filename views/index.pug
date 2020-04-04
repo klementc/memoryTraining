@@ -37,6 +37,7 @@ block content
           th(scope='col') Date
           th(scope='col') Type
           th(score='col') Score
+          th(score='col') Duration
           th(scope='col') Seed
       tbody
         each g in lastGames
@@ -54,5 +55,7 @@ block content
                   |  (from #{g.add})
             td 
               | #{g.score}/#{g.maxscore}
+            td
+              | #{(g.duration/60).toFixed(0)} min #{(g.duration%60).toFixed(0)} s
             td 
               | #{g.seed} 

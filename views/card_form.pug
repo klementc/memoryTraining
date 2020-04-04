@@ -19,8 +19,13 @@ block content
 
   form(method='POST' action='')
     div.form-group
-      label(for='duration') Duration (minutes):
-      input#duration.form-control(type='number', placeholder='3', min=0 name='duration', value=(undefined===duration ? '3' : duration.name))
+      div(class="form-row")
+        div(class="form-group col-md-6")
+          label(for='durationm') Duration (min)
+          input#durationm.form-control(type='number', placeholder='3', min=0 name='durationm', value=(undefined===durationm ? '3' : durationm.name))
+        div(class="form-group col-md-6")
+          label(for='durations') Duration (sec)
+          input#durations.form-control(type='number', placeholder='0', min=0 max=59 name='durations', value=(undefined===durations ? '0' : durations.name))
       br
       label(for='group_by') Cards per line:
       input#group_by.form-control(type='number',

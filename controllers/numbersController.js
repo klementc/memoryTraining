@@ -24,8 +24,11 @@ exports.number_create_post = [
     validator.body('group_by', 'Group_by must be a number between 1 and 50').isInt({min:1, max:50}),
     validator.sanitizeBody('group_by').escape(),
 
-    validator.body('duration', 'Duration must be a number between 1 and 180').isInt({min:0, max:180}),
-    validator.sanitizeBody('duration').escape(),
+    validator.body('durationm', 'Minutes must be a number between 1 and 180').isInt({min:0, max:180}),
+    validator.sanitizeBody('durationm').escape(),
+
+    validator.body('durations', 'Seconds must be a number between 1 and 59').isInt({min:0, max:59}),
+    validator.sanitizeBody('durations').escape(),
 
     validator.sanitizeBody('seed').escape(),
 
@@ -58,13 +61,14 @@ exports.number_create_post = [
             req.session.namount = req.body.amount;
             req.session.ngroup_by = req.body.group_by;
             req.session.nbase = req.body.base;
+            req.session.nduration = (Number(req.body.durationm)*60)+Number(req.body.durations);
             
             res.render('number_play', {
                 title: 'Play Words', 
                 amount: req.body.amount,
                 group_by: req.body.group_by,
                 number_list: get_number_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by, req.body.base=="binary"),
-                timer: req.body.duration*60,
+                timer: (Number(req.body.durationm)*60)+Number(req.body.durations),
                 seed:seed,
                 size:req.body.amount*req.body.group_by,
                 row:req.body.group_by,
@@ -125,7 +129,8 @@ exports.number_verify = function(req, res) {
                                 score: score,
                                 maxscore: req.session.namount*req.session.ngroup_by,
                                 seed: req.session.nseed,
-                                date: Date.now()
+                                date: Date.now(),
+                                duration: req.session.nduration  
                             });
                             g.save(function (err, game) {
                                 if (err) return console.error(err);

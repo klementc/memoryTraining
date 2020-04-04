@@ -29,8 +29,11 @@ exports.word_create_post = [
   validator.body('group_by', 'Group_by must be a number between 1 and 10').isInt({min:1, max:10}),
   validator.sanitizeBody('group_by').escape(),
 
-  validator.body('duration', 'Duration must be a number between 1 and 180').isInt({min:0, max:180}),
-  validator.sanitizeBody('duration').escape(),
+  validator.body('durationm', 'Duration (min) must be a number between 0 and 180').isInt({min:0, max:180}),
+  validator.sanitizeBody('durationm').escape(),
+
+  validator.body('durations', 'Duration (s) must be a number between 0 and 59').isInt({min:0, max:59}),
+  validator.sanitizeBody('durations').escape(),
 
   validator.body('language','Please select a valid language').isIn(['en-us','fr']),
   validator.sanitizeBody('language').escape(),
@@ -64,6 +67,7 @@ exports.word_create_post = [
             req.session.wseed = seed;
             req.session.wsize = req.body.amount*req.body.group_by;
             req.session.wlanguage = req.body.language;
+            req.session.wduration = (Number(req.body.durationm)*60)+Number(req.body.durations);
             
             // render game page
             res.render('word_play', {
@@ -137,7 +141,8 @@ exports.word_verify = function(req, res) {
                             maxscore: req.session.wamount*req.session.wgroup_by,
                             seed: req.session.wseed,
                             date: Date.now(),
-                            add: req.session.wlanguage
+                            add: req.session.wlanguage,
+                            duration: req.session.wduration
                         });
                         g.save(function (err, game) {
                             if (err) return console.error(err);

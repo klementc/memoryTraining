@@ -51,6 +51,7 @@ exports.flash_create_post = [
         req.session.fnseed = seed;
         req.session.fnamount = req.body.amount;
         req.session.fnbase = req.body.base;
+        req.session.fnduration = req.body.duration;
 
         res.render('flash_numbers_play', {
             title: 'Play Flash Numbers', 
@@ -118,7 +119,8 @@ exports.flash_verify = function(req, res) {
                           maxscore: req.session.fnamount,
                           seed: req.session.fnseed,
                           date: Date.now(),
-                          add: req.session.fnbase
+                          add: req.session.fnbase,
+                          duration: req.session.fnduration
                       });
                       g.save(function (err, game) {
                           if (err) return console.error(err);

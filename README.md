@@ -1,6 +1,6 @@
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/klementc/memorytraining)](https://hub.docker.com/r/klementc/memorytraining)
 
-Live version:[http://vps708727.ovh.net/](http://vps708727.ovh.net/)
+Live version:[https://www.memgames.net/game/card/verify](https://www.memgames.net/game/card/verify)
 
 # memoryTraining
 

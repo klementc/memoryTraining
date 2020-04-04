@@ -56,6 +56,7 @@ block content
             td 
               | #{g.score}/#{g.maxscore}
             td
-              | #{(g.duration/60).toFixed(0)} min #{(g.duration%60).toFixed(0)} s
+              if(g.duration)
+                | #{(g.duration/60).toFixed(0)} min #{(g.duration%60).toFixed(0)} s
             td 
               | #{g.seed} 

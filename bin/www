@@ -32,6 +32,11 @@ if(process.env.MT_HTTPS) {
   };
 
   server = https.createServer(options,app);
+
+  http.createServer(function (req, res) {
+      res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+      res.end();
+  }).listen(80);
 } else {
   server = http.createServer(app);
 }

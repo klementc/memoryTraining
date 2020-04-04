@@ -73,7 +73,7 @@ exports.word_create_post = [
             res.render('word_play', {
                 title: 'Play Words', 
                 word_list: get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, req.body.group_by, req.session.wlanguage),
-                timer: req.body.duration*60,
+                timer: req.session.wduration,
                 seed:seed,
                 size:req.body.amount*req.body.group_by,
                 row:req.body.group_by,

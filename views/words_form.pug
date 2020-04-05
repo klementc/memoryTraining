@@ -4,15 +4,16 @@ block content
   h1 #{title}
   strong Dictionnaries might contain some words that shouldn't be there, in this case, send me a mail (contact@memgames.net) notifying me of modifications to do, thanks! 
   br
-  button(type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal") Rules
+
+  button(type="button" class="float-right btn btn-info btn-lg" data-toggle="modal" data-target="#myModal") Rules
 
   div(id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="exampleModalLongTitle" aria-hidden="true")
     div(class="modal-dialog" role="document")
       div(class="modal-content")
         div(class="modal-header")
           button(type="button" class="close" data-dismiss="modal") &times;
-          
-        div(class="mobal-body")
+          h4(class="modal-title") Rules
+        div(class="modal-body")
           | This game consists in remembering sets of words.
           br
           | Select the amount of sets you want to remember, as well as their size.
@@ -21,6 +22,8 @@ block content
           br
           strong sidenote: 
           | the seed is an integer used for data generation. If you put the same seed for several games, you will have the same words (this can be used to replay, or play the same game as a friend).
+        div(class="modal-footer")
+          button(type="button" class="btn btn-default" data-dismiss="modal") Close
   hr
 
   form(method='POST' action='')

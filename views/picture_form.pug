@@ -3,18 +3,24 @@ extends layout
 block content
   div
     h1= title
+    
     button(type="button" class="float-right btn btn-info btn-lg" data-toggle="modal" data-target="#myModal") Rules
-    div(id="myModal" class="modal fade" role="dialog")
-      div(class="modal-dialog")
+
+    div(id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="exampleModalLongTitle" aria-hidden="true")
+      div(class="modal-dialog" role="document")
         div(class="modal-content")
           div(class="modal-header")
             button(type="button" class="close" data-dismiss="modal") &times;
             h4(class="modal-title") Rules
-          div(class="mobal-body")
+          div(class="modal-body")
             | This game consists in remembering a set of pictures.
             br
             | Once time is up, select which pictures you saw, and validate to see your score. A picture correctly checked adds one point, a picture not checked or a picture checked that shouldn't removes one point.
-            
+            br
+            strong sidenote: 
+            | the seed is an integer used for data generation. If you put the same seed for several games, you will have the same words (this can be used to replay, or play the same game as a friend).
+          div(class="modal-footer")
+            button(type="button" class="btn btn-default" data-dismiss="modal") Close
   hr
 
   form(method='POST' action='')

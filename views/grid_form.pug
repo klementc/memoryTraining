@@ -3,14 +3,16 @@ extends layout
 block content
   div
     h1 Grid
+
     button(type="button" class="float-right btn btn-info btn-lg" data-toggle="modal" data-target="#myModal") Rules
-    div(id="myModal" class="modal fade" role="dialog")
-      div(class="modal-dialog")
+
+    div(id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="exampleModalLongTitle" aria-hidden="true")
+      div(class="modal-dialog" role="document")
         div(class="modal-content")
           div(class="modal-header")
             button(type="button" class="close" data-dismiss="modal") &times;
             h4(class="modal-title") Rules
-          div(class="mobal-body")
+          div(class="modal-body")
             | This game consists in remembering which cells of a grid are activated.
             br
             | You can choose the size of the grid, and the duration of your memorization.
@@ -18,6 +20,8 @@ block content
             | When you click on submit, the grid appears. Your task is to remember the position of colored cells.
             br
             | Once time is up, click on the cells that you remembered, and validate. Your score is equal to the number of cells that were selected correctly and the number of cells that weren't activated, and not clicked.
+          div(class="modal-footer")
+            button(type="button" class="btn btn-default" data-dismiss="modal") Close
   hr
 
   form(method='POST' action='')

@@ -5,13 +5,21 @@ const async = require('async');
 var levelNames = [
   'Unknown',
   'Lazy',
+  'Baby',
   'Newcomer',
   'Undergraduate',
-  'Good one',
   'Not giving up?',
+  'Little big',
+  'Big little',
   'Serious player',
+  'Big Boyz',
+  'Elephant',
+  'Monster',
+  'Unstoppable',
+  'Gold',
+  'Diamond',
   'Masterclass',
-  'Grandmaster'
+  '1337'
 ]
 function calculateLevel(xp) {
   return Math.floor((25 + Math.sqrt(625 + 100 * xp)) / 50)
@@ -23,7 +31,7 @@ function xpForLevel(level) {
 
 function getNameFromLevel(level) {
   if(levelNames.length < level){
-    return 'Too many levels'
+    return 'Hall of fame'
   }
   return levelNames[level-1];
 }

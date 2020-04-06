@@ -1024,10 +1024,6 @@ anciennete
 anciens
 ancre
 andain
-andante
-andantino
-andelysienne
-anderson
 andorran
 andorrane
 andorrans
@@ -1525,7 +1521,6 @@ arreter
 arretes
 arretoir
 arrets
-arrhes
 arriere
 arriere-garde
 arriere-plan
@@ -4326,7 +4321,7 @@ compare
 comparee
 comparer
 compares
-comparez!
+comparez
 compartiment
 compartiments
 compas
@@ -5577,7 +5572,7 @@ deale
 dealers
 deauville
 debacle
-deballe!
+deballe
 debander
 debarbouiller
 debarcadere
@@ -8841,7 +8836,7 @@ fete
 feter
 fetes
 feu
-feu!
+feu
 feuillage
 feuille
 feuilles
@@ -9349,7 +9344,6 @@ freluquet
 fremir
 fremissement
 frenay
-french
 frenesie
 frenetique
 frenetiquement
@@ -11757,10 +11751,8 @@ journaux
 journee
 journees
 jours
-jouvet
 jovial
 joxe
-joyce
 joyeuse
 joyeusement
 joyeux
@@ -12549,7 +12541,6 @@ macons
 macro
 madame
 madani
-made
 madeleine
 mademoiselle
 madone
@@ -18226,7 +18217,6 @@ rivieres
 rivoli
 riz
 riziere
-robbins
 robe
 robert
 roberto
@@ -19701,7 +19691,6 @@ suffisantes
 suffisants
 suffisent
 suffit
-suffit!
 suffixe
 suffocation
 suffoquer
@@ -20078,7 +20067,6 @@ taxi
 taximetre
 taxis
 taylor
-tbilissi
 tchad
 tchadien
 tchadiens
@@ -20089,7 +20077,6 @@ tchecoslovaquie
 tcheque
 tcheques
 tchernobyl
-te
 technicien
 techniciens
 technicite
@@ -20527,7 +20514,6 @@ toutefois
 toutes
 tout-puissant
 toux
-townships
 toxicomane
 toxicomanes
 toxicomanie
@@ -21620,33 +21606,20 @@ walesa
 wallon
 walt
 walter
-warning
 warrants
 washington
-wayang
-wayne
-welles
-wells
-welter
-werner
-west
 western
 westminster
-white
-wigwam
 wilfried
 william
 williams
 willy
 wilson
-wim
 wimbledon
-windhoek
 wolf
 wolfgang
 word
 world
-worms
 wyoming
 xavier
 xenakis
@@ -21656,7 +21629,6 @@ yacht
 yack
 yak
 yalta
-yamaguchi
 yamaha
 yamoussoukro
 yang

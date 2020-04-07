@@ -95,7 +95,7 @@ exports.get_dashboard = function(req, res){
       }
 
       res.render('dashboard', {user:req.user, nbg:docs[0], sc: docs[1], games:docs[2], px: plotx, py: ploty, level:calculateLevel(xp), xp:xp, rank:getNameFromLevel(calculateLevel(xp)),
-      nextlvl: xpForLevel(1+calculateLevel(xp))})
+      nextlvl: xpForLevel(1+calculateLevel(xp)), prevlvl: xpForLevel(calculateLevel(xp))})
     })
 
   }else{

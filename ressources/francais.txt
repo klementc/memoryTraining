@@ -840,7 +840,6 @@ alterer
 alternance
 alternative
 alternatives
-altier
 altitude
 alto
 altruisme
@@ -7002,7 +7001,6 @@ drolerie
 droles
 dromadaire
 drome
-drouot
 dru
 dst
 du
@@ -8075,7 +8073,6 @@ estampe
 este
 esthetique
 esthetiques
-estier
 estimable
 estimaient
 estimait
@@ -9759,8 +9756,6 @@ glander
 glandouiller
 glanures
 glapir
-glasgow
-glasnost
 glisse
 glissement
 glissent
@@ -10153,7 +10148,6 @@ harmonie
 harmonieux
 harmonisation
 harmoniser
-harold
 harpe
 harpiste
 harris
@@ -11856,8 +11850,6 @@ kennedy
 kenya
 kenyan
 khan
-kharg
-khartoum
 khmers
 khrouchtchev
 kidnapper
@@ -14597,7 +14589,6 @@ outrage
 outrager
 outre
 outrepasser
-outsider
 ouvert
 ouverte
 ouvertement
@@ -18471,7 +18462,6 @@ saisonnieres
 saisons
 sait
 sajous
-sakharov
 salade
 salades
 salaire
@@ -18957,10 +18947,6 @@ shakespeare
 shamir
 shampoing
 shampooing
-shanghai
-sheffield
-shell
-shelley
 shetland
 shimon
 shoah
@@ -19136,7 +19122,6 @@ soeurs
 soffite
 soffites
 sofia
-sofres
 software
 soi
 soi-disant
@@ -21668,7 +21653,6 @@ zimbabwe
 zinc
 zingueur
 zip
-zlotys
 zombie
 zone
 zones

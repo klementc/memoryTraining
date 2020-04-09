@@ -74,6 +74,13 @@ exports.get_dashboard = function(req, res){
         cb(null, r);
       })
     })
+    queries.push(function(cb){
+      User.findOne({username: req.user.username}
+      ).exec(function(err, r){
+        if(err) throw cb(err);
+        cb(null, r);
+      })
+    })
     async.parallel(queries, function(err, docs) {
       // if any query fails
       if (err) {
@@ -84,16 +91,7 @@ exports.get_dashboard = function(req, res){
         plotx.push(arr["_id"])
         ploty.push(arr["count"])
       })
-
-      var xp = 0;
-      for(var i=0;i<ploty.length;i++) {
-        xp+=ploty[i];
-      }
-      for(var i=0;i<docs[1].length;i++){
-        console.log(docs[1][i])
-        xp+=0.1*docs[1][i].count
-      }
-
+      var xp = docs[4].xp;
       res.render('dashboard', {user:req.user, nbg:docs[0], sc: docs[1], games:docs[2], px: plotx, py: ploty, level:calculateLevel(xp), xp:xp, rank:getNameFromLevel(calculateLevel(xp)),
       nextlvl: xpForLevel(1+calculateLevel(xp)), prevlvl: xpForLevel(calculateLevel(xp))})
     })

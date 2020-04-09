@@ -120,6 +120,12 @@ exports.flash_verify = function(req, res) {
           if(! err){
               Game.findOne({gid: req.session.fwgid}).exec(function(err, ga){
                   if(! err && ! ga){
+                      user.findOneAndUpdate({_id: u._id}, { $inc:
+                        {xp: score/3}
+                      }, function(err, affected, resp) {
+                        return console.log(resp);
+                      })
+
                       var g = new Game({
                           user: u._id,
                           gid: req.session.fwgid,
@@ -129,7 +135,7 @@ exports.flash_verify = function(req, res) {
                           seed: req.session.fwseed,
                           date: Date.now(),
                           add: req.session.fwlanguage,
-                          duration: req.session.fwduration
+                          duration: req.session.fwduration*req.session.fwamount
                       });
                       g.save(function (err, game) {
                           if (err) return console.error(err);

@@ -3,7 +3,9 @@
 const mongoose = require('mongoose'),
     passportLocalMongoose = require('passport-local-mongoose');
  
-const UserSchema =  new mongoose.Schema({});
+const UserSchema =  new mongoose.Schema({
+    xp: {type: Number, required: true}
+});
  
 UserSchema.plugin(passportLocalMongoose);
  

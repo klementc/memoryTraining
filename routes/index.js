@@ -83,7 +83,7 @@ router.post('/register', (request, response) => {
     response.render('register',{err: 'Username must be at least 2 characters long.'})
   }else{
     // Creates and saves a new user with a salt and hashed password
-    User.register(new User({username: request.body.username}), request.body.password, function(err, user) {
+    User.register(new User({username: request.body.username, xp:0}), request.body.password, function(err, user) {
         if (err) {
             console.log(err);
             return response.render('register');

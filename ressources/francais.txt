@@ -9683,9 +9683,7 @@ geometrie
 geophysique
 geopolitique
 george
-georgi
 georgie
-georgien
 gerant
 gerard
 gerbe
@@ -10509,7 +10507,6 @@ ignorer
 il
 ile
 iles
-iliescu
 illegal
 illegale
 illegalement
@@ -12328,7 +12325,6 @@ lituanien
 lituaniens
 liturgie
 liverpool
-living-room
 livraison
 livraisons
 livrant
@@ -19873,8 +19869,6 @@ suzanne
 suzuki
 suzy
 svelte
-swapo
-sybaritisme
 sydney
 syllabe
 sylvain

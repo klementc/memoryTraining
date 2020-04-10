@@ -1,6 +1,6 @@
 cd UTKFace
 
-a=1                 
+a=0
 for i in *_0_*_*.jpg; do
   new=$(printf "m-%d.jpg" "$a")
   mv -f -i -- "$i" "$new"
@@ -8,7 +8,7 @@ for i in *_0_*_*.jpg; do
 done
 
 
-a=1                 
+a=0
 for i in *_1_*_*.jpg; do
   new=$(printf "f-%d.jpg" "$a")
   mv -f -i -- "$i" "$new"

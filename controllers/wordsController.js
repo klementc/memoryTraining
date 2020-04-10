@@ -68,7 +68,7 @@ exports.word_create_post = [
             req.session.wsize = req.body.amount*req.body.group_by;
             req.session.wlanguage = req.body.language;
             req.session.wduration = (Number(req.body.durationm)*60)+Number(req.body.durations);
-            
+            console.log("dur:"+req.session.wduration)
             // render game page
             res.render('word_play', {
                 title: 'Play Words', 
@@ -126,7 +126,7 @@ exports.word_verify = function(req, res) {
           if(ok) lg.push("bg-success");
           else lg.push("bg-danger");
       }
-
+      console.log("dur:"+req.session.wduration)
       // if this is the end and the user is register, add his score to the database
       if(req.isAuthenticated() && recall){
         user.findOne({username: req.user.username}).exec(function(err, u){

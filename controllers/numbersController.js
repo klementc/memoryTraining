@@ -115,7 +115,6 @@ exports.number_verify = function(req, res) {
             if(ok) lg.push("bg-success");
             else lg.push("bg-danger");
         }
-
         // if this is the end and the user is register, add his score to the database
         if(req.isAuthenticated() && recall){
             user.findOne({username: req.user.username}).exec(function(err, u){

@@ -2,28 +2,11 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}.
   hr
   p Use this website to train your memory.
   p To get better scores, you can use techniques such as memory palaces etc.
 
-  p Have fun :p (register to get your scores counted)
-
-  ul
-    li
-      a(href='/game/numbers/') Numbers (base 10 / binary)
-    li
-      a(href='/game/words/') Words 
-    li
-      a(href='/game/pi/') Recall famous numbers (Pi, golden ratio, square root of 2...)
-    li
-      a(href='/game/flash_words') Flash words
-    li
-      a(href='/game/grid') Grid
-    li 
-      a(href='/game/picture') Picture
-    li
-      | (More to come)
+  p Have fun :p (register to get your scores saved)
       
   if err
     strong Failed to retrieve data from Database

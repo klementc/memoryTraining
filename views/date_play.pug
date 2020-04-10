@@ -1,0 +1,26 @@
+extends challenge
+
+block data
+  h1= title
+  hr
+  p(class="text-center")
+    em(id="time") #{timer} 
+    | seconds left!
+  strong Seed: #{seed}
+  hr
+
+  div(id="memZone" class="table-responsive")
+    table(class="table table-striped table-hovertable-bordered table-bordered")
+      thead
+        tr
+          th(scope='col') #
+          th(scope='col') Date
+          th(scope='col') Event
+      tbody
+        each n, index in date_list
+          tr
+            th(scope='row') #{index}
+            td
+              | #{n[0][0]}
+            td
+              | #{n[0][1]} 

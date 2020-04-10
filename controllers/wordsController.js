@@ -45,7 +45,7 @@ exports.word_create_post = [
       const err = validator.validationResult(req);
 
       if(! err.isEmpty()) {
-          res.render('numbers_form', {
+          res.render('words_form', {
               title:'Start a Word Game',
               errors: err.array(), 
               user:req.user

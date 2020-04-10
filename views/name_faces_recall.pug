@@ -17,11 +17,11 @@ block content
           if i % 3 == 0
             div(class="form-group-row")
           div(class="col-md-2")
-            img(src="/names/pics/f-"+c+".jpg" width="100" height="150" class="center-block") 
+            img(src="/names/pics/"+c width="100" height="150" class="center-block") 
             if nList && recall
-              strong(class="text-center") #{names[i]}
+              strong(class="text-center") #{(names[i]+"").toLowerCase()}
             else
-              input(name=c type="input" class="form-control" autocomplete='off')
+              input(name=c[0] type="input" class="form-control" autocomplete='off')
           - i++
     br
     if !(recall && nList)

@@ -26,4 +26,5 @@ done
 cd ../../..
 mkdir -p public/names/txt public/names/pics 
 cd public/names/txt
-wget https://raw.githubusercontent.com/smashew/NameDatabases/master/NamesDatabases/first%20names/us.txt
+wget https://raw.githubusercontent.com/arineng/arincli/master/lib/male-first-names.txt
+wget https://raw.githubusercontent.com/arineng/arincli/master/lib/female-first-names.txt

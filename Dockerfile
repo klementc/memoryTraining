@@ -17,7 +17,7 @@ COPY . .
 
 # fetch pictures
 RUN mkdir -p ressources/pics
-RUN bash getPics.sh
+RUN bash getRes.sh
 
 EXPOSE 3000
 CMD [ "npm", "run", "deploy" ]

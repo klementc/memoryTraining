@@ -44,17 +44,15 @@ exports.nf_create_post = [
     }else{
       seed = req.body.seed ? req.body.seed : randU32Sync();
 
-      var names = get_word_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, 1);
-      var faces = get_number_list_from_seed(MersenneTwister19937.seed(seed+1), req.body.amount, 1, 23700);
-
-      console.log(names);
-      console.log(faces);
-
       // session data
       req.session.nfgid = uuid();
       req.session.nfseed = seed;
       req.session.nfamount = req.body.amount;
       req.session.nfduration = (Number(req.body.durationm)*60)+Number(req.body.durations);;
+
+      var genre = get_genre_list_from_seed(MersenneTwister19937.seed(req.session.nfseed), req.session.nfamount, 1);
+      var names = get_word_list_from_seed(MersenneTwister19937.seed(req.session.nfseed), req.session.nfamount, 1,genre);
+      var faces = get_number_list_from_seed(MersenneTwister19937.seed(req.session.nfseed+1), req.session.nfamount, 1, 9999, genre);
 
       res.render('name_faces_play', {names: names, faces: faces, user:req.user,  timer: (Number(req.body.durationm)*60)+Number(req.body.durations),verifUrl: "/game/name_faces/verify"});
     }
@@ -77,16 +75,18 @@ exports.nf_verify = function(req, res) {
       var nList = [];
       var score = 0;
 
-      var names = get_word_list_from_seed(MersenneTwister19937.seed(req.session.nfseed), req.session.nfamount, 1);
-      var faces = get_number_list_from_seed(MersenneTwister19937.seed(req.session.nfseed+1), req.session.nfamount, 1, 23700);
+      var genre = get_genre_list_from_seed(MersenneTwister19937.seed(req.session.nfseed), req.session.nfamount, 1);
+      var names = get_word_list_from_seed(MersenneTwister19937.seed(req.session.nfseed), req.session.nfamount, 1, genre);
+      var faces = get_number_list_from_seed(MersenneTwister19937.seed(req.session.nfseed+1), req.session.nfamount, 1, 9999,genre);
 
-      console.log(names)
-      console.log(faces)
+
       for(var i=0;i<req.session.nfamount;i++) {
           var ok = true;
+          console.log(req.body[faces[i]]+" : "+names[i])
           if(undefined!=req.body[faces[i]] && req.body[faces[i]]!=""){
             recall=true;
-                  if(req.body[faces[i]]==names[i])
+            
+                  if((req.body[faces[i]]+"").toUpperCase()==(names[i]+"").toUpperCase())
                       score++;
           }else{
               ok=false;
@@ -131,33 +131,56 @@ exports.nf_verify = function(req, res) {
 
 
 /** create random numbers to memorize from a seed */
-function get_number_list_from_seed(seed, nLine, lSize, maxi) {
+function get_number_list_from_seed(seed, nLine, lSize, maxi, genres) {
+  const random = new Random(seed);
+  var g = genres
+  var nList = []
+  for(var i=0; i<nLine; i++){
+      nList.push([]);
+      for(var j=0;j<lSize;j++) {
+          if(g[i][j]=="f")
+          nList[i].push("f-"+random.integer(0,maxi)+".jpg");
+        else
+          nList[i].push("m-"+random.integer(0,maxi)+".jpg");
+      }
+  }
+  return nList;
+}
+
+/** create random numbers to memorize from a seed */
+function get_genre_list_from_seed(seed, nLine, lSize) {
   const random = new Random(seed);
   var nList = []
   for(var i=0; i<nLine; i++){
       nList.push([]);
       for(var j=0;j<lSize;j++) {
-          nList[i].push(random.integer(0,maxi));
+          if(random.integer(0,1)){nList[i].push("f");}
+          else{nList[i].push("m");}
       }
   }
   return nList;
 }
 
 /** fetch random words from dictionnary to memorize from a seed */
-function get_word_list_from_seed(seed, nLine, lSize) {
+function get_word_list_from_seed(seed, nLine, lSize, genres) {
   const random = new Random(seed);
-
-  var lf = 'public/names/txt/us.txt';
+  var g = genres
+  var lf = 'public/names/txt/female-first-names.txt';
+  var lm = 'public/names/txt/male-first-names.txt';
 
   // https://stackoverflow.com/questions/6831918/node-js-read-a-text-file-into-an-array-each-line-an-item-in-the-array
   var fs = require('fs');
-  var array = fs.readFileSync(lf).toString().trim().split(/\r?\n/);
-  
+  var arrayf = fs.readFileSync(lf).toString().trim().split(/\r?\n/);
+  var arraym = fs.readFileSync(lm).toString().trim().split(/\r?\n/);
+
   var nList = []
   for(var i=0; i<nLine; i++){
       nList.push([]);
       for(var j=0;j<lSize;j++) {
-          nList[i].push(array[random.integer(0,array.length)]);
+          if(g[i][j]=="f")
+            nList[i].push(arrayf[random.integer(0,arrayf.length)]);
+          else
+            nList[i].push(arraym[random.integer(0,arraym.length)]);
       }
   }
   return nList;

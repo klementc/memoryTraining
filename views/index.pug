@@ -2,11 +2,17 @@ extends layout
 
 block content
   h1= title
+  div(class="alert alert-info" role="alert")
+    strong Last Update (10/04): 
+      a(href='/game/date') Play Dates!
   hr
-  p Use this website to train your memory.
-  p To get better scores, you can use techniques such as memory palaces etc.
-
-  p Have fun :p (register to get your scores saved)
+  p 
+    | Memgames provides you some games aiming at improving your memory.
+    br
+    | To make the best scores, you can use techniques such as memory palaces (and others) which can help you get much better performance
+  p
+    | Registered members can obtain some information about their games and best scores.
+  p Have fun :p 
       
   if err
     strong Failed to retrieve data from Database

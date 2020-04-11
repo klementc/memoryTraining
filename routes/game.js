@@ -16,4 +16,7 @@ router.get('/', function(req, res, next) {
                         err: err});});
 });
 
+router.get('/other', function(req, res, next) {
+    res.render('other_challenges',{});
+})
 module.exports = router;

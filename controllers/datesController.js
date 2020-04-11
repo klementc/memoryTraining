@@ -59,7 +59,7 @@ exports.date_create_post = [
             req.session.damount = req.body.amount;
             req.session.dseed = seed;
             req.session.dduration = (Number(req.body.durationm)*60)+Number(req.body.durations);
-            console.log(get_date_list_from_seed(MersenneTwister19937.seed(seed), req.body.amount, 1))
+
             // render game page
             res.render('date_play', {
                 title: 'Play Dates', 
@@ -102,7 +102,6 @@ exports.date_verify = function(req, res) {
         
           if(undefined!=req.body[i] && (''+req.body[i]).trim()!=[]){
               var s = (''+req.body[i]).trim()
-              console.log(req.body[i]+" : "+correct[i][0][0]+" : "+s)
               nList.push(s);
               recall = true;
               if(s==correct[i][0][0])

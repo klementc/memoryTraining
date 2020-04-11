@@ -1,0 +1,39 @@
+extends layout
+
+block content
+  h1 #{title}
+  br
+  a(href='https://artofmemory.com/blog/how-to-calculate-the-day-of-the-week-4203.html') 
+    strong Look at this guide to know how to win :)
+  br
+  button(type="button" class="float-right btn btn-info btn-lg" data-toggle="modal" data-target="#myModal") Rules
+
+  div(id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="exampleModalLongTitle" aria-hidden="true")
+    div(class="modal-dialog" role="document")
+      div(class="modal-content")
+        div(class="modal-header")
+          button(type="button" class="close" data-dismiss="modal") &times;
+          h4(class="modal-title") Rules
+        div(class="modal-body")
+          | Guess the day of the week corresponding to a date! (hint: look at the guide, it's not that hard)
+          br
+          strong sidenote: 
+          | the seed is an integer used for data generation. If you put the same seed for several games, you will have the same words (this can be used to replay, or play the same game as a friend).
+        div(class="modal-footer")
+          button(type="button" class="btn btn-default" data-dismiss="modal") Close
+  hr
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='amount') Number of days to find:
+      input#amount.form-control(type='number', placeholder='10', name='amount', value=(undefined===amount ? '10' : amount.name))
+      br
+      label(for='seed') Seed (optional):
+      input#seed.form-control(type='number', step="any", placeholder='', name='seed', value=(undefined===seed ? '' : seed.name))
+      br
+      button.btn.btn-primary(type='submit') Submit
+
+  if errors 
+   ul
+    for error in errors
+     li!= error.msg

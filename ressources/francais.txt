@@ -6844,7 +6844,6 @@ dole
 doleances
 dollar
 dollars
-dolphy
 dom
 domaine
 domaines
@@ -11947,7 +11946,6 @@ laitier
 laiton
 laitue
 laius
-lalonde
 lama
 lambert
 lambin
@@ -12107,7 +12105,6 @@ lemire
 lemond
 lendemain
 lendemains
-lendl
 lenine
 leningrad
 leninisme
@@ -12226,7 +12223,6 @@ liee
 liees
 liege
 lien
-lienemann
 liens
 lier
 lies
@@ -14577,7 +14573,6 @@ ours
 ourse
 oursin
 ourson
-out
 outil
 outillage
 outils
@@ -15000,7 +14995,6 @@ pattes
 paturage
 pau
 paul
-paulhan
 paume
 paumer
 paupiere

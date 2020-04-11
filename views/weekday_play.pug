@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  h1= title
+  hr
+
+  strong Seed: #{seed}
+  hr
+
+  form(method="POST" action="/game/weekday/verify")
+    div(id="memZone" class="table-responsive")
+      table(class="table table-striped table-hovertable-bordered table-bordered")
+        thead
+          tr
+            th(scope='col') #
+            th(scope='col') Date
+            th(scope='col') Event
+        tbody
+          each n, index in date_list
+            tr
+              th(scope='row') #{index}
+              td
+                  select#language.form-control(class="day" name=index)
+                    option(value="monday") Monday
+                    option(value="tuesday") Tuesday
+                    option(value="wednesday") Wednesday
+                    option(value="thursday") Thursday
+                    option(value="friday") Friday
+                    option(value="saturday") Saturday
+                    option(value="sunday") Sunday
+              td
+                | #{n[0]}/#{n[1]}/#{n[2]}
+  
+    button.btn.btn-primary(type="submit") Verify

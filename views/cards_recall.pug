@@ -4,24 +4,27 @@ block content
   h1 Recall!
   strong Seed: #{seed}
   br
-  strong Score: #{score} / 52
+  if recall
+    strong Score: #{score} / 52
   hr
   p Write the position of each card in the deck (first card = 0, second = 1 ...)
 
   form
   form(method='POST' action='')  
-    div.form-group
+    table(class="table table-striped table-hovertable-bordered table-bordered")
       thead
       tbody
         - var i = 0
-        each c in cards
-          if i % 6 == 0
-            div(class="form-group-row")
-          div(class="col-md-2")
-            img(src="/images/cards/"+c width="100" height="150" class="center-block") 
-            if nList && recall
-              strong(class="text-center") #{nList[i]}
-            else
+        each c,index in cards
+          if i % 3 == 0
+            tr
+
+          if recall
+            td(class=lg[i])
+              img(src="/images/cards/"+cards2[index] width="100" height="150" class="center-block")
+          else
+            td
+              img(src="/images/cards/"+cards[index] width="100" height="150" class="center-block") 
               input(name=c type="input" class="form-control" autocomplete='off')
           - i++
     br

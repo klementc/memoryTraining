@@ -73,6 +73,7 @@ exports.card_verify = function(req, res) {
     } else {
       var recall;
       var nList = [];
+      var lg=[];
       var score = 0;
 
       rand.seedArc4(req.session.caseed);
@@ -82,6 +83,11 @@ exports.card_verify = function(req, res) {
       var correct={};
       for(var i=0;i<cardsC.length;i++){
         correct[cardToImgName(cardsC[i])]=i;
+      }
+
+      var c2=[];
+      for(var i=0;i<cardsC.length;i++){
+        c2.push(cardToImgName(cardsC[i]));
       }
 
       rand.seedArc4(req.session.caseed);
@@ -99,9 +105,13 @@ exports.card_verify = function(req, res) {
             recall=true;
                   if(req.body[cardToImgName(cardsC[i])]==correct[cardToImgName(cardsC[i])])
                       score++;
+                  else
+                    ok = false;
           }else{
               ok=false;
           }
+          if(ok) lg.push("bg-success");
+          else lg.push("bg-danger");
       }
 
       // if this is the end and the user is register, add his score to the database
@@ -137,7 +147,7 @@ exports.card_verify = function(req, res) {
         })
       }
 
-      res.render('cards_recall',{user:req.user, score:score, cards:c,group_by: req.session.cagroup_by, seed:req.session.caseed, recall: recall, nList:nList})
+      res.render('cards_recall',{user:req.user, score:score, cards:c,cards2:c2, group_by: req.session.cagroup_by, seed:req.session.caseed, recall: recall, nList:nList, lg:lg})
     }
 }
 

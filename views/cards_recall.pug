@@ -5,9 +5,13 @@ block content
   strong Seed: #{seed}
   br
   if recall
-    strong Score: #{score} / 52
+    div(class="alert alert-success" role="alert")
+      h4 Score: #{score} / 52
+      if user
+        strong +#{xp.toFixed(1)} xp
   hr
   p Write the position of each card in the deck (first card = 0, second = 1 ...)
+  strong Click on a card to automatically add the next value in the input
 
   form
   form(method='POST' action='')  
@@ -23,10 +27,29 @@ block content
             td(class=lg[i])
               img(src="/images/cards/"+cards2[index] width="100" height="150" class="center-block")
           else
-            td
-              img(src="/images/cards/"+cards[index] width="100" height="150" class="center-block") 
-              input(name=c type="input" class="form-control" autocomplete='off')
+            td()
+              img(id="_"+c onclick="console.log(setVal(this.id));" src="/images/cards/"+cards[index] width="100" height="150" class="center-block") 
+              input(id=c name=c type="number" class="form-control" autocomplete='off')
           - i++
     br
     if !(recall && nList)
       button.btn.btn-primary(type='submit') Submit
+
+  script.
+    var t = "#{cards}".split(",")
+    function getMin(){
+      var least = -1;
+      for(var i =0;i<t.length;i++) {
+        var d = document.getElementById(t[i]).value;
+        if(d && least<Number(d)){
+          console.log("newval: "+d)
+          least = d;
+        }
+      }
+      return least;
+    }
+
+    function setVal(cell){
+      document.getElementById(cell.substr(1)).value = Number(getMin())+1;
+    }
+    //console.log(getMin())

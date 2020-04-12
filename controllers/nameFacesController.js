@@ -97,10 +97,10 @@ exports.nf_verify = function(req, res) {
       if(req.isAuthenticated() && recall){
         user.findOne({username: req.user.username}).exec(function(err, u){
             if(! err){
-                Game.findOne({gid: req.session.wgid}).exec(function(err, ga){
+                Game.findOne({gid: req.session.nfgid}).exec(function(err, ga){
                     if(! err && ! ga){
                         user.findOneAndUpdate({_id: u._id}, { $inc:
-                          {xp: score/6}
+                          {xp: score/3}
                         }, function(err, affected, resp) {
                           return console.log(resp);
                         })
@@ -125,7 +125,7 @@ exports.nf_verify = function(req, res) {
         })
       }
 
-      res.render('name_faces_recall',{user:req.user, score:score, names:names, faces:faces,group_by: req.session.cagroup_by, seed:req.session.caseed, recall: recall, nList:nList, amount:req.session.nfamount})
+      res.render('name_faces_recall',{user:req.user, score:score, names:names, faces:faces,group_by: req.session.cagroup_by, seed:req.session.caseed, recall: recall, nList:nList, amount:req.session.nfamount, xp: score/3})
     }
 }
 

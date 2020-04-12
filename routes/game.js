@@ -17,6 +17,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/other', function(req, res, next) {
-    res.render('other_challenges',{});
+    res.render('other_challenges',{user:req.user});
 })
 module.exports = router;

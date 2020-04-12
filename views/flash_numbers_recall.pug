@@ -10,7 +10,10 @@ block content
   if err
     h2 #{err}
   else if recall
-    h2(id='score') Your score: #{score} / #{amount}
+    div(class="alert alert-success" role="alert")
+      h4(id='score') Your score: #{score} / #{amount}
+      if user
+        strong +#{xp.toFixed(1)} xp
     table(class="table table-bordered")
       thead
         tr

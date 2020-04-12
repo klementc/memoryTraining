@@ -120,10 +120,10 @@ exports.date_verify = function(req, res) {
       if(req.isAuthenticated() && recall){
         user.findOne({username: req.user.username}).exec(function(err, u){
             if(! err){
-                Game.findOne({gid: req.session.wgid}).exec(function(err, ga){
+                Game.findOne({gid: req.session.dgid}).exec(function(err, ga){
                     if(! err && ! ga){
                         user.findOneAndUpdate({_id: u._id}, { $inc:
-                          {xp: score/5}
+                          {xp: score/2}
                         }, function(err, affected, resp) {
                           return console.log(resp);
                         })
@@ -162,7 +162,8 @@ exports.date_verify = function(req, res) {
           score: score,
           correct: get_date_list_from_seed(MersenneTwister19937.seed(req.session.dseed), req.session.damount, 1),
           err:err, 
-          user:req.user});
+          user:req.user,
+          xp: score});
   }
 }
 

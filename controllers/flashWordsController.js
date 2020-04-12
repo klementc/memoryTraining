@@ -121,7 +121,7 @@ exports.flash_verify = function(req, res) {
               Game.findOne({gid: req.session.fwgid}).exec(function(err, ga){
                   if(! err && ! ga){
                       user.findOneAndUpdate({_id: u._id}, { $inc:
-                        {xp: score/3}
+                        {xp: score/2}
                       }, function(err, affected, resp) {
                         return console.log(resp);
                       })
@@ -157,7 +157,8 @@ exports.flash_verify = function(req, res) {
         group_by: 1,
         amount: req.session.fwamount,
         recall: recall, 
-        user:req.user
+        user:req.user,
+        xp: score/2
     });
   }
 }

@@ -10,7 +10,8 @@ block content
   if err
     h2 #{err}
   else
-    h2(id='score') Your score: #{score} / #{amount}
+    div(class="alert alert-success" role="alert")
+      h4(id='score') Your score: #{score} / #{amount}
     hr
     table(class="table table-bordered")
       thead

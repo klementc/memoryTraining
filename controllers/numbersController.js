@@ -122,7 +122,7 @@ exports.number_verify = function(req, res) {
                     Game.findOne({gid: req.session.ngid}).exec(function(err, ga){
                         if(! err && ! ga){
                             user.findOneAndUpdate({_id: u._id}, { $inc:
-                                {xp: score/10}
+                                {xp: score/4}
                               }, function(err, affected, resp) {
                                 return console.log(resp);
                               })
@@ -161,7 +161,8 @@ exports.number_verify = function(req, res) {
             recall: recall,
             correct: correct,
             err:err, 
-            user:req.user});
+            user:req.user,
+            xp: score/4});
     }
 }
 

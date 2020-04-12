@@ -167,7 +167,8 @@ exports.pi_verify = function(req, res) {
       nList: nList,
       number: req.session.pinumber,
       lg: lg, 
-      user:req.user
+      user:req.user,
+      xp:score/10
     });
   }
 }

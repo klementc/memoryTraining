@@ -11,7 +11,10 @@ block content
   if err
     h2 #{err}
   else if recall
-    h2(id='score') Your score: #{score}/#{size}!
+    div(class="alert alert-success" role="alert")
+      h4(id='score') Your score: #{score}/#{size}!
+      if user
+        strong +#{xp.toFixed(1)} xp
     hr
     strong Correction:
     br

@@ -134,7 +134,7 @@ exports.word_verify = function(req, res) {
                 Game.findOne({gid: req.session.wgid}).exec(function(err, ga){
                     if(! err && ! ga){
                         user.findOneAndUpdate({_id: u._id}, { $inc:
-                          {xp: score/5}
+                          {xp: score/3}
                         }, function(err, affected, resp) {
                           return console.log(resp);
                         })
@@ -175,7 +175,8 @@ exports.word_verify = function(req, res) {
           score: score,
           correct: get_word_list_from_seed(MersenneTwister19937.seed(req.session.wseed), req.session.wamount, req.session.wgroup_by, req.session.wlanguage),
           err:err, 
-          user:req.user});
+          user:req.user,
+          xp: score/3});
   }
 }
 

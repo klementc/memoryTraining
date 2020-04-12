@@ -25,6 +25,9 @@ exports.day_create_post = [
   validator.body('amount', 'Amount must be a number between 1 and 1000').isInt({min:1, max:1000}),
   validator.sanitizeBody('amount').escape(),
 
+  validator.body('ymax', 'Date max must be a number between 1700 and 30000').isInt({min:1700, max:30000}),
+  validator.sanitizeBody('ymax').escape(),
+
   validator.sanitizeBody('seed').escape(),
 
   // create the game or show errors
@@ -51,11 +54,12 @@ exports.day_create_post = [
             req.session.wdgid = uuid();
             req.session.wdamount = req.body.amount;
             req.session.wdseed = seed;
+            req.session.wdymax = req.body.ymax;
 
             // render game page 
             res.render('weekday_play', {
                 title: 'Play Dates', 
-                date_list: genDates(MersenneTwister19937.seed(seed), req.body.amount),
+                date_list: genDates(MersenneTwister19937.seed(seed), req.body.amount, req.session.wdymax),
                 seed:seed,
                 size:req.body.amount,
                 row:req.body.group_by,
@@ -85,7 +89,7 @@ exports.day_verify = function(req, res) {
       var score = 0;
       var lg=[];
 
-      var dates = genDates(MersenneTwister19937.seed(req.session.wdseed), req.session.wdamount);
+      var dates = genDates(MersenneTwister19937.seed(req.session.wdseed), req.session.wdamount,req.session.wdymax);
       var correct = []
 
       for(var i=0;i<req.session.wdamount;i++) {
@@ -149,11 +153,11 @@ function getDayOfDate(day,month,year) {
   return dayR[num%7]
 }
 
-function genDates(seed, amount) {
+function genDates(seed, amount, maxi) {
   const random = new Random(seed);
   var dList = [];
   for(var i=0; i<amount; i++) {
-    dList.push([random.integer(1,28),random.integer(1,12),random.integer(1600, 2500)]);
+    dList.push([random.integer(1,28),random.integer(1,12),random.integer(1600, maxi)]);
   }
   return dList;
 }

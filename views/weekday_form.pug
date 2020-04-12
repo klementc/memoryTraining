@@ -30,6 +30,9 @@ block content
       br
       label(for='seed') Seed (optional):
       input#seed.form-control(type='number', step="any", placeholder='', name='seed', value=(undefined===seed ? '' : seed.name))
+      br      
+      label(for='ymax') Year Max:
+      input#seed.form-control(type='number', step="any", placeholder='2500', name='ymax', value=(undefined===ymax ? '2500' : ymax.name))
       br
       button.btn.btn-primary(type='submit') Submit
 

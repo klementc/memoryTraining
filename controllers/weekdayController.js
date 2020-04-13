@@ -2,6 +2,8 @@ const validator = require('express-validator');
 var async = require('async');
 var crypto = require('crypto');
 const { uuid } = require('uuidv4');
+var user = require('../models/user');
+var Game = require('../models/game');
 
 // rng using seed (not available with math.random)
 const { Random, MersenneTwister19937 } = require("random-js");
@@ -111,8 +113,38 @@ exports.day_verify = function(req, res) {
           if(ok) lg.push("bg-success");
           else lg.push("bg-danger");
       }
-      console.log(correct);
 
+      // if this is the end and the user is register, add his score to the database
+      if(req.isAuthenticated() && recall){
+        user.findOne({username: req.user.username}).exec(function(err, u){
+            if(! err){
+                Game.findOne({gid: req.session.wdgid}).exec(function(err, ga){
+                    if(! err && ! ga){
+                        user.findOneAndUpdate({_id: u._id}, { $inc:
+                          {xp: score/2}
+                        }, function(err, affected, resp) {
+                          return console.log(resp);
+                        })
+                        var g = new Game({
+                            user: u._id,
+                            gid: req.session.wdgid,
+                            type: 'Guess the date',
+                            score: score,
+                            maxscore: req.session.wdamount,
+                            seed: req.session.wdseed,
+                            date: Date.now(),
+                            duration: 0
+                        });
+                        g.save(function (err, game) {
+                            if (err) return console.error(err);
+                            console.log("success!"+game);
+                            Game.find({user: u._id}).exec(function(err,v){console.log(v)})
+                          });
+                    }
+                  })
+            }
+        })
+      }
       
       res.render('weekday_verify',{
           title:'Correction of your recall',
@@ -126,7 +158,8 @@ exports.day_verify = function(req, res) {
           dates:dates,
           correct: correct,
           err:err, 
-          user:req.user});
+          user:req.user,
+          xp: score/2});
   }
 }
 

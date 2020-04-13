@@ -7005,7 +7005,6 @@ dst
 du
 dualisme
 dualite
-dubcek
 dubitatif
 dublin
 dubois
@@ -12436,8 +12435,6 @@ loyaute
 loyer
 loyers
 lu
-luanda
-lubbers
 lubricite
 lubrifier
 lubrique
@@ -20573,7 +20570,6 @@ tranquilliser
 tranquillite
 transaction
 transactions
-transcaucasie
 transcription
 transcrire
 transfere

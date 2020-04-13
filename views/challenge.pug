@@ -1,7 +1,11 @@
 extends layout
 
 block content
-
+  p(class="text-center")
+    em(id="time") #{timer} 
+    | seconds left!
+  strong Seed: #{seed}
+  hr
   block data
 
   form(action=verifUrl method="POST")

@@ -12,6 +12,8 @@ block content
   else
     div(class="alert alert-success" role="alert")
       h4(id='score') Your score: #{score} / #{amount}
+      if user
+        strong +#{xp.toFixed(1)} xp
     hr
     table(class="table table-bordered")
       thead

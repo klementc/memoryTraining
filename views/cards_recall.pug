@@ -1,19 +1,10 @@
-extends layout
+extends verify
 
-block content
-  h1 Recall!
-  strong Seed: #{seed}
-  br
+block verif
   if recall
-    div(class="alert alert-success" role="alert")
-      h4 Score: #{score} / 52
-      if user
-        strong +#{xp.toFixed(1)} xp
-  hr
-  p Write the position of each card in the deck (first card = 0, second = 1 ...)
-  strong Click on a card to automatically add the next value in the input
+    p Write the position of each card in the deck (first card = 0, second = 1 ...)
+    strong Click on a card to automatically add the next value in the input
 
-  form
   form(method='POST' action='')  
     table(class="table table-striped table-hovertable-bordered table-bordered")
       thead

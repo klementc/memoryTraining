@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  if recall
+    h1 Correction
+  else
+    h1 Recall
+  hr
+  if seed
+    strong For seed: #{seed}
+  br
+  strong Total: #{size}
+  hr
+  if err
+    h2 #{err}
+  else if recall
+    div(class="alert alert-success" role="alert")
+      h4(id='score') Your score: #{score} / #{size}
+      if user
+        strong +#{xp.toFixed(1)} xp
+    hr
+    block verif
+  else
+    block verif

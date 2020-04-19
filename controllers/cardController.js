@@ -148,7 +148,18 @@ exports.card_verify = function(req, res) {
         })
       }
 
-      res.render('cards_recall',{user:req.user, score:score, cards:c,cards2:c2, group_by: req.session.cagroup_by, seed:req.session.caseed, recall: recall, nList:nList, lg:lg, xp:score/3})
+      res.render('cards_recall',{
+        user:req.user,
+        score:score,
+        cards:c,
+        cards2:c2,
+        group_by: req.session.cagroup_by,
+        seed:req.session.caseed,
+        recall: recall,
+        nList:nList,
+        lg:lg,
+        xp:score/3,
+        size:52})
     }
 }
 

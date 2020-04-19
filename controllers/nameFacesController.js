@@ -125,7 +125,17 @@ exports.nf_verify = function(req, res) {
         })
       }
 
-      res.render('name_faces_recall',{user:req.user, score:score, names:names, faces:faces,group_by: req.session.cagroup_by, seed:req.session.caseed, recall: recall, nList:nList, amount:req.session.nfamount, xp: score/3})
+      res.render('name_faces_recall',{
+        user:req.user,
+        score:score,
+        names:names,
+        faces:faces,
+        seed:req.session.caseed,
+        recall: recall,
+        nList:nList,
+        amount:req.session.nfamount,
+        xp: score/3,
+        size: req.session.nfamount})
     }
 }
 

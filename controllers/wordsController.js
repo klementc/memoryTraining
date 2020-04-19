@@ -161,7 +161,6 @@ exports.word_verify = function(req, res) {
       }
       
       res.render('words_verify',{
-          title:'Validate your recall',
           row:req.session.row,
           base: req.session.base,
           seed:req.session.wseed,

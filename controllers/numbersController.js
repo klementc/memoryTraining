@@ -148,7 +148,6 @@ exports.number_verify = function(req, res) {
         }
 
         res.render('numbers_verify',{
-            title:'Validate your recall',
             lg: lg,
             row:req.session.namount,
             amount: req.session.namount,

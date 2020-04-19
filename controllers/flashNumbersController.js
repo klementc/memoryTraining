@@ -148,7 +148,8 @@ exports.flash_verify = function(req, res) {
         amount: req.session.fnamount,
         recall: recall, 
         user:req.user,
-        xp: score/4
+        xp: score/4,
+        size: req.session.fnamount
     });
   }
 }

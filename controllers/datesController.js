@@ -149,7 +149,6 @@ exports.date_verify = function(req, res) {
       }
       
       res.render('date_verify',{
-          title:'Correction of your recall',
           row:req.session.row,
           base: req.session.base,
           seed:req.session.dseed,

@@ -147,7 +147,6 @@ exports.day_verify = function(req, res) {
       }
       
       res.render('weekday_verify',{
-          title:'Correction of your recall',
           seed:req.session.wdseed,
           amount: req.session.wdamount,
           recall: recall,
@@ -159,7 +158,8 @@ exports.day_verify = function(req, res) {
           correct: correct,
           err:err, 
           user:req.user,
-          xp: score/2});
+          xp: score/2,
+          size: req.session.wdamount});
   }
 }
 

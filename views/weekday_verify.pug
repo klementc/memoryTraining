@@ -1,37 +1,23 @@
-extends layout
+extends verify
 
-block content
-  h1= title
-  hr
-  strong For seed: #{seed}
-  br
-  strong Total dates: #{size}
-  hr
-  if err
-    h2 #{err}
-  else
-    div(class="alert alert-success" role="alert")
-      h4(id='score') Your score: #{score} / #{amount}
-      if user
-        strong +#{xp.toFixed(1)} xp
-    hr
-    table(class="table table-bordered")
-      thead
-        tr
-          th(scope='col') # Row
-          th(scope='col') Recall
-          th(scope='col') Correct
-          th(scope='col') Date
-      tbody
-        - var l = 0
-        
-        while l < amount
-          tr(class=lg[l])
-            th(scope='row') #{l}
-            td
-              | #{nList[l]}
-            td
-              | #{correct[l]}
-            td
-              | #{dates[l][0]}/#{dates[l][1]}/#{dates[l][2]}
-          - l++
+block verif
+  table(class="table table-bordered")
+    thead
+      tr
+        th(scope='col') # Row
+        th(scope='col') Recall
+        th(scope='col') Correct
+        th(scope='col') Date
+    tbody
+      - var l = 0
+      
+      while l < amount
+        tr(class=lg[l])
+          th(scope='row') #{l}
+          td
+            | #{nList[l]}
+          td
+            | #{correct[l]}
+          td
+            | #{dates[l][0]}/#{dates[l][1]}/#{dates[l][2]}
+        - l++

@@ -1,17 +1,7 @@
-extends layout
+extends verify
 
-block content
-  h1= title
-  hr
-
-  if err
-    h2 #{err}
-  else if recall
-    div(class="alert alert-success" role="alert")
-      h4(id='score') Your score: #{score}/#{amount*group_by}
-      if user
-        strong +#{xp.toFixed(1)} xp
-    hr
+block verif
+  if recall
     table(class="table table-bordered")
       thead
         tr
@@ -32,8 +22,6 @@ block content
                 | #{n} 
           - l++
   else
-    strong Total numbers: #{size}
-      hr
     p Enter the numbers in the following text input, without any separation between digits (put a random character for the ones you don't remember).
 
     form(method='POST' action='/game/pi/verify')

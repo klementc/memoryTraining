@@ -1,20 +1,7 @@
-extends layout
+extends verify
 
-block content
-  h1= title
-  hr
-  strong For seed: #{seed}
-  br
-  strong Total dates: #{size}
-  hr
-  if err
-    h2 #{err}
-  else if recall
-    div(class="alert alert-success" role="alert")
-      h4(id='score') Your score: #{score} / #{amount}
-      if user
-        strong +#{xp.toFixed(1)} xp
-    hr
+block verif
+  if recall
     table(class="table table-bordered")
       thead
         tr

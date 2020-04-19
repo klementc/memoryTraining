@@ -44,6 +44,7 @@ exports.picture_create_post = [
 
           console.log("play")
           res.render('picture_play', {
+            size: req.session.picnbpics,
             nbPics: req.session.picnbpics,
             picList: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed)), req.session.picnbpics, 150),
             correct: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+1)), 30,150),
@@ -69,7 +70,6 @@ exports.picture_verify = function(req, res) {
           user:req.user});
   } else {
       res.render('picture_verify',{
-          title:'Validate your recall',
           nbPics: req.session.picnbpics,
           picList: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed)), req.session.picnbpics, 150),
           correct: get_pics_list_from_seed((MersenneTwister19937.seed(req.session.picseed+1)), 30,150),

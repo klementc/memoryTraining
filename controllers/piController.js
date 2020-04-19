@@ -157,10 +157,10 @@ exports.pi_verify = function(req, res) {
     }
 
     res.render('pi_recall',{
-      title:'Validate your recall',
       score: score,
       group_by: req.session.pigroup_by,
       amount: req.session.piamount,
+      size: req.session.pigroup_by*req.session.piamount,
       number: req.session.pinumber,
       recall: recall,
       correct: correct,

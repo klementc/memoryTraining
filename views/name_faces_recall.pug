@@ -1,17 +1,6 @@
-extends layout
+extends verify
 
-block content
-  h1 Recall!
-  strong Seed: #{seed}
-  br
-  if recall
-    div(class="alert alert-success" role="alert")
-      h4 Score: #{score} / #{amount} !
-      if user
-        strong +#{xp.toFixed(1)} xp
-  hr
-
-  form
+block verif
   form(method='POST' action='')  
     div.form-group
       thead

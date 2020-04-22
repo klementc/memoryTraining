@@ -24,6 +24,7 @@ var flashNumbersRouter = require('./routes/flashNumbers');
 var nameFacesRouter = require('./routes/nameFaces');
 var datesRouter = require('./routes/dates');
 var weekdayRouter = require('./routes/weekday');
+var plateRouter = require('./routes/plates');
 
 var compression = require('compression');
 var helmet = require('helmet');
@@ -94,6 +95,7 @@ app.use('/game/flash_numbers/', flashNumbersRouter);
 app.use('/game/name_faces/', nameFacesRouter);
 app.use('/game/date/', datesRouter);
 app.use('/game/weekday/', weekdayRouter);
+app.use('/game/plates/', plateRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

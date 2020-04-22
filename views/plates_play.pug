@@ -1,0 +1,15 @@
+extends challenge
+
+block data
+  div(id="memZone" class="table-responsive")
+    table(class="table table-striped table-hover table-bordered")
+      thead
+        tr
+          th(scope='col') #
+          th(scope='col') Plate
+      tbody
+        each n, index in plate_list
+          tr
+            th(scope='row') #{index}
+            td
+              | #{n}

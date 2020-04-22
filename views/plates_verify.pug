@@ -1,0 +1,36 @@
+extends verify
+
+block verif
+  if recall
+    table(class="table table-bordered")
+      thead
+        tr
+          th(scope='col') #
+          th(scope='col') Recall
+          th(scope='col') Correct
+      tbody
+        each p,l in correct
+          tr(class=lg[l])
+            th(scope='row') #{l}
+            td
+              | #{nList[l]} 
+            td
+              | #{p}
+  else
+    p Enter the plates in the following text input, separating words with a space.
+
+    form(method='POST' action='verify')
+      div.form-group
+        table(class="table table-bordered table-striped table-hover")
+          thead
+            tr
+              th(scope='col') #
+              th(scope='col') Plate
+          tbody
+            each p,l in correct
+              tr
+                th(scope='row') #{l}
+                td
+                  input(type="input" name=l autocomplete="off")
+      if ! recall
+        button.btn.btn-primary(type='submit') Submit

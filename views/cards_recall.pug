@@ -11,15 +11,15 @@ block verif
       tbody
         - var i = 0
         each c,index in cards
-          if i % 3 == 0
+          if i % 13 == 0
             tr
 
           if recall
             td(class=lg[i])
-              img(src="/images/cards/"+cards2[index] width="100" height="150" class="center-block")
+              img(src="/images/cards/"+cards2[index] width="50" height="75" class="center-block")
           else
             td()
-              img(id="_"+c onclick="console.log(setVal(this.id));" src="/images/cards/"+cards[index] width="100" height="150" class="center-block") 
+              img(id="_"+c onclick="console.log(setVal(this.id));" src="/images/cards/"+cards[index] width="50" height="72" class="center-block") 
               input(id=c name=c type="number" class="form-control" autocomplete='off')
           - i++
     br

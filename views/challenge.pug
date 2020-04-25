@@ -20,7 +20,7 @@ block content
       document.getElementById("memZone").innerHTML="<strong>Finished</strong>";
     }
     var i;
-    setTimeout(function() {
+    window.onload = setTimeout(function() {
       clearInterval(j);
       var b = document.getElementById("b")
       b.style.display = 'block';
@@ -34,6 +34,7 @@ block content
     }, 10000)
 
     var left=10;
+
     var j = setInterval(function() {
       if(left == 0){
         clearInterval(j)
@@ -42,7 +43,7 @@ block content
       document.getElementById('time').innerHTML = "Starting in "+Number(left)+" seconds";
     }, 1000);
 
-    setTimeout(function () {
+    window.onload = setTimeout(function () {
       finish()
       document.getElementById('time').innerHTML = "0 "
       var form = $('<form action="#{verifUrl}" method="post"></form>');

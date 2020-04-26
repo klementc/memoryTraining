@@ -14,6 +14,10 @@ router.get('/', function(req, res, next) {
   res.redirect('/game/');
 });
 
+router.get('/resources', function(req, res, next) {
+  res.render('resources',{user:req.user}); 
+});
+
 router.get('/statistics', async (req, res) => {
   var queries = [];
   queries.push(function(cb){

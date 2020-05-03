@@ -1,16 +1,14 @@
 extends layout
 
 block content
-  div(class="header" id="timerSticky")
+  div(class="header alert alert-info" id="timerSticky")
     p(class="text-center")
       em(id="time") Ready
-  strong Seed: #{seed}
-  hr
   div(id="b" style="display:none;")
     block data
 
-  form(action=verifUrl method="POST")
-    button.btn.btn-primary(type='submit' onclick="finish();") Submit
+    form(action=verifUrl method="POST")
+      button.btn.btn-primary(type='submit' onclick="finish();") Submit
 
   script.
 
